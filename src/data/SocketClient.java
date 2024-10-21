@@ -22,6 +22,10 @@ public class SocketClient {
     private static Socket socket;
     public static int validate;
 
+    public static void reset() {
+    	validate = 0;
+    }
+
     // Método estático para conectarse al servidor y comenzar a escuchar mensajes
     public static void connectToServer(String host) {
     	HOST = host;

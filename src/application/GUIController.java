@@ -33,7 +33,7 @@ public class GUIController {
 
 		if (!tfId.getText().isEmpty() && !tfPassword.getText().isEmpty()) {
 
-			SocketClient.validate = 0;
+			SocketClient.reset();
 			// Enviar el mensaje al servidor
 			SocketClient.sendMessage("user,"+ tfId.getText()+ ","+ tfPassword.getText());
 
@@ -41,14 +41,13 @@ public class GUIController {
 
 			// Una vez que se actualice el valor, continúa la validación
 			String validate = LogicSockect.validateUser();
-			System.out.println(validate+"gui");
 
 			if (validate != null) {
-				System.out.println("6656");
+
 				Logic.notifyAction(LogicSockect.validateUser(), message);
 			}
 		}else{
-
+			Logic.notifyAction("No pueden haber campos vacios", message);
 		}
 	}
 

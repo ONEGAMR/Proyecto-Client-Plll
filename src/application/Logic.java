@@ -13,8 +13,6 @@ import javafx.util.Duration;
 
 public class Logic {
 
-
-	
 	public static void closeWindows(Button button, String window) {
 	    FXMLLoader loader = new FXMLLoader(Logic.class.getResource(window));
 	    try {
