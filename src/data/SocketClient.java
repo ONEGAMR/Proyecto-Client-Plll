@@ -64,9 +64,18 @@ public class SocketClient {
                     // Procesar el mensaje y actualizar la variable 'validate'
                     if(LogicSockect.separarPalabras(message).get(0).equals("user")) {
                         validate = Integer.parseInt(LogicSockect.separarPalabras(message).get(1));
+                        //si todo esta bien llena los datos del usuario con los datos recibidos
+                        System.out.println(message);
+                        if(LogicSockect.separarPalabras(message).size() >  2){
 
+                            LogicSockect.fullUser(message);
+                        }
+                    }
 
-                        System.out.println(validate+"socket");
+                    //recibe la confirmacion de que se actualizo el usuario
+                    if(LogicSockect.separarPalabras(message).get(0).equals("us_confirm")){
+                        System.out.println(message);
+                        LogicSockect.setUs_confirm(Boolean.parseBoolean(LogicSockect.separarPalabras(message).get(1)));
                     }
                 }
             } catch (IOException e) {

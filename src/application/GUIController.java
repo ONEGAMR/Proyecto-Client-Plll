@@ -8,6 +8,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import data.SocketClient;
 import javafx.event.ActionEvent;
+import javafx.scene.paint.Color;
+
+import java.awt.*;
 
 public class GUIController {
 	@FXML
@@ -44,10 +47,13 @@ public class GUIController {
 
 			if (validate != null) {
 
-				Logic.notifyAction(LogicSockect.validateUser(), message);
+				Logic.notifyAction(LogicSockect.validateUser(), message, Color.RED);
+			}else{
+				System.out.println(Logic.user.toString());
+				Logic.closeWindows(btEnter,"/presentation/MainGUI.fxml");
 			}
 		}else{
-			Logic.notifyAction("No pueden haber campos vacios", message);
+			Logic.notifyAction("No pueden haber campos vacios", message, Color.RED);
 		}
 	}
 
