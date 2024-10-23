@@ -1,6 +1,7 @@
 package data;
 
 import application.Logic;
+import domain.Meal;
 import domain.User;
 
 import java.time.LocalDate;
@@ -9,7 +10,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class LogicSockect {
+
 public static boolean us_confirm;
+public static ArrayList<Meal> meals = new ArrayList<>();
+private static String beforeRoute;
 
     public static List<String> separarPalabras(String texto) {
         // Usa el método split() para separar por comas
@@ -48,6 +52,19 @@ public static boolean us_confirm;
 
 
         return user;
+    }
+
+    public synchronized static void setListMeals(String meal){
+
+        String[] mealData = meal.split(",");
+
+        meals.add(new Meal(mealData[1],Integer.parseInt(mealData[2])));
+        System.out.println(mealData[1] +" "+Integer.parseInt(mealData[2]) + "probando si esta bien");
+        System.out.println(meals);
+    }
+
+    public synchronized static ArrayList<?> getListMeals(){
+        return meals;
     }
 
     public synchronized static void setUs_confirm(boolean us_confirm) {

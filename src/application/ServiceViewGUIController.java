@@ -1,72 +1,42 @@
 package application;
 
-import domain.Meal;
+import data.LogicSockect;
+import data.SocketClient;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.control.Alert.AlertType;
+import javafx.event.ActionEvent;
+
+import domain.Meal;
+import java.util.List;
 
 public class ServiceViewGUIController {
 
-    @FXML
-    private ComboBox<String> cbReservationDay;
-
-    @FXML
-    private ToggleGroup mealTimeGroup;
-
-    @FXML
-    private RadioButton rbBreakfast;
-
-    @FXML
-    private RadioButton rbLunch;
-
-    @FXML
-    private Label lbName;
-
-    @FXML
-    private TableView<Meal> tvMeals;
-
-    @FXML
-    private TableColumn<Meal, String> colMealName;
-
-    @FXML
-    private TableColumn<Meal, Double> colPrice;
-
-    @FXML
-    private TableColumn<Meal, Boolean> colRequest;
-
-    @FXML
-    private Label lbEmptyTable;
-
-    @FXML
-    private Button btReturn;
-
-
-
-    private ObservableList<Meal> mealList;
-
+    @FXML private ComboBox<String> cbReservationDay;
+    @FXML private RadioButton rbBreakfast;
+    @FXML private ToggleGroup mealTimeGroup;
+    @FXML private RadioButton rbLunch;
+    @FXML private TableView<Meal> tvMeals;
+    @FXML private TableColumn<Meal, String> colMealName;
+    @FXML private TableColumn<Meal, Integer> colPrice;
+    @FXML private TableColumn<Meal, Button> colRequest;
+    @FXML private Label lbEmptyTable;
+    @FXML private Button btReturn;
 
     @FXML
     public void initialize() {
-        // Initialize the comboBox with some example days
-        cbReservationDay.setItems(FXCollections.observableArrayList("Lunes", "Martes", "Miércoles", "Jueves", "Viernes"));
+        setupComboBoxes();
         setupRadioButtons();
-        //setupTableColumns();
-
-        // Add placeholder text
-        tvMeals.setPlaceholder(lbEmptyTable);
-        
-        // Initialize meal list
-        mealList = FXCollections.observableArrayList();
-        tvMeals.setItems(mealList);
+        setupTableColumns();
+        setupListeners();
     }
 
-    @FXML
-    private void handleReturnAction() {
-        // Handle the return button action
-        showAlert("Botón Regresar", "Se presionó el botón Regresar.");
+    // Configura los ComboBox
+    private void setupComboBoxes() {
+        cbReservationDay.setItems(FXCollections.observableArrayList("Lunes", "Martes", "Miércoles", "Jueves", "Viernes"));
     }
 
     // Configura los RadioButton
@@ -75,42 +45,113 @@ public class ServiceViewGUIController {
         rbLunch.setUserData("lunch");
     }
 
-//    private void setupTableColumns() {
-//        colMealName.setCellValueFactory(new PropertyValueFactory<>("name"));
-//        colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
-//        colPrice.setCellFactory(column -> new TableCell<>() {
-//            @Override
-//            protected void updateItem(Integer price, boolean empty) {
-//                super.updateItem(price, empty);
-//                setText(empty || price == null ? null : "₡" + price);
-//            }
-//        });
-//        colRequest.setCellFactory(tc -> new TableCell<>() {
-//            final Button btn = new Button("Solicitar Comida");
-//            {
-//                btn.setStyle("-fx-background-color: #f0f0f0; -fx-text-fill: black; -fx-font-weight: normal; -fx-background-radius: 4;"
-//                        + " -fx-pref-height: 20; -fx-pref-width: 120;");
-//                btn.setOnAction(event -> {
-//                    Meal meal = getTableView().getItems().get(getIndex());
-//                    handleMealRequest(meal);
-//                });
-//            }
-//
-//            @Override
-//            protected void updateItem(Button item, boolean empty) {
-//                super.updateItem(item, empty);
-//                setGraphic(empty ? null : btn);
-//            }
-//        });
-//    }
+    // Configura las columnas de la tabla
+    private void setupTableColumns() {
+        colMealName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
+        colPrice.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(Integer price, boolean empty) {
+                super.updateItem(price, empty);
+                setText(empty || price == null ? null : "₡" + price);
+            }
+        });
+        colRequest.setCellFactory(tc -> new TableCell<>() {
+            final Button btn = new Button("Solicitar Comida");
+            {
+                btn.setStyle("-fx-background-color: #f0f0f0; -fx-text-fill: black; -fx-font-weight: normal; -fx-background-radius: 4;"
+                        + " -fx-pref-height: 20; -fx-pref-width: 120;");
+                btn.setOnAction(event -> {
+                    Meal meal = getTableView().getItems().get(getIndex());
+                    handleMealRequest(meal);
+                });
+            }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+            @Override
+            protected void updateItem(Button item, boolean empty) {
+                super.updateItem(item, empty);
+                setGraphic(empty ? null : btn);
+            }
+        });
     }
 
+    // Configura los escuchadores de eventos
+    private void setupListeners() {
+        cbReservationDay.setOnAction(e -> updateTable());
+        mealTimeGroup.selectedToggleProperty().addListener((obs, oldVal, newVal) -> updateTable());
+    }
+
+    // Actualiza la tabla de comidas según los filtros seleccionados
+    private void updateTable() {
+        String selectedDay = cbReservationDay.getValue();
+        String selectedMealType = mealTimeGroup.getSelectedToggle() != null ?
+                (String) mealTimeGroup.getSelectedToggle().getUserData() : null;
+
+
+        if (selectedDay == null || selectedMealType == null) {
+            tvMeals.setItems(FXCollections.observableArrayList());
+            lbEmptyTable.setVisible(true);
+            return;
+        }
+
+        //Enviar el dia y tipo de comida y recibir las comidas y solicitar las comidas
+
+
+        SocketClient.sendMessage("listMeals,"+selectedDay+","+selectedMealType);
+
+        Platform.runLater(() -> {
+
+            if (LogicSockect.getListMeals() != null) {
+                tvMeals.getItems().clear();
+                List<Meal> meals = (List<Meal>) LogicSockect.getListMeals();
+                tvMeals.setItems(FXCollections.observableArrayList(meals));
+                lbEmptyTable.setVisible(meals.isEmpty());
+            } else {
+                tvMeals.setItems(FXCollections.observableArrayList());
+                lbEmptyTable.setVisible(true);
+            }
+        });
+
+
+//        if (LogicSockect.getListMeals() != null) {
+//            List<Meal> meals = (List<Meal>) LogicSockect.getListMeals();
+//            tvMeals.setItems(FXCollections.observableArrayList(meals));
+//            lbEmptyTable.setVisible(meals.isEmpty());
+//        } else {
+//            tvMeals.setItems(FXCollections.observableArrayList());
+//            lbEmptyTable.setVisible(true);
+//        }
+    }
+
+    // Maneja la solicitud de una comida
+    private void handleMealRequest(Meal meal) {
+
+        double availableMoney = Logic.user.getDineroDisponible();
+        int mealPrice = meal.getPrice();
+
+        if (availableMoney < mealPrice) {
+            Logic.showAlert(AlertType.INFORMATION, "Saldo Insuficiente", "No tienes suficiente dinero para solicitar esta comida.");
+            return;
+        }
+
+        boolean isConfirmed = Logic.showConfirmationAlert(
+                "¿Deseas solicitar esta comida?",
+                "Confirmación de Compra"
+        );
+
+        if (isConfirmed) {
+            Logic.user.setDineroDisponible(availableMoney - mealPrice);
+
+            //enviar mensaje de actualizar al user por gastar dinero
+           // StudentData.updateStudent(selectedStudent);
+
+            Logic.showAlert(AlertType.INFORMATION, "Pedido Confirmado", "Pedido realizado con éxito. Nuevo saldo: ₡" + Logic.user.getDineroDisponible());
+        }
+    }
+
+    @FXML
+    public void handleReturnAction(ActionEvent event) {
+        Logic.closeWindows(btReturn,"/presentation/MainGUI.fxml");
+    }
 
 }

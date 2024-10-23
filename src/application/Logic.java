@@ -104,5 +104,12 @@ public class Logic {
 			return -1.0;
 		}
 	}
-
+	// Muestra una alerta con el tipo, título y mensaje especificados
+	public static void showAlert(Alert.AlertType type, String title, String message) {
+		Alert alert = new Alert(type);
+		alert.setTitle(title);
+		alert.setHeaderText(null);
+		alert.setContentText(message);
+		alert.showAndWait();
+	}
 }

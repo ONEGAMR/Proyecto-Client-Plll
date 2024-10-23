@@ -5,11 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-import application.Logic;
+import application.ServiceViewGUIController;
 import javafx.application.Platform;
 
 
@@ -76,6 +73,13 @@ public class SocketClient {
                     if(LogicSockect.separarPalabras(message).get(0).equals("us_confirm")){
                         System.out.println(message);
                         LogicSockect.setUs_confirm(Boolean.parseBoolean(LogicSockect.separarPalabras(message).get(1)));
+                    }
+
+                    if(LogicSockect.separarPalabras(message).get(0).equals("listMeals")){
+
+                        System.out.println(message);
+                        LogicSockect.setListMeals(message);
+
                     }
                 }
             } catch (IOException e) {

@@ -22,8 +22,9 @@ public class MainGUIController {
 	// Event Listener on Button[#btSolicitarServicio].onAction
 	@FXML
 	public void solicitarServicio(ActionEvent event) {
-
+		Logic.closeWindows(btSolicitarServicio,"/presentation/ServiceViewGUI.fxml");
 	}
+
 	// Event Listener on Button[#btVerSaldo].onAction
 	@FXML
 	public void verSaldo(ActionEvent event) {
