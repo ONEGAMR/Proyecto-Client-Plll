@@ -112,7 +112,7 @@
 					<Button fx:id="btnPurchase" maxWidth="Infinity" onAction="#handlePurchaseAction" styleClass="button-red" text="Realizar Pedido" />
 					<Button fx:id="btReturn" maxWidth="Infinity" onAction="#handleReturnAction" styleClass="button-white" text="Volver" />
 				</VBox>
-<!--			</VBox>-->
-<!--		</HBox>-->
+			</VBox>
+		</HBox>
 	</VBox>
 </AnchorPane>
