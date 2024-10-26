@@ -1,7 +1,15 @@
-/* Root Styles naranja FF7F50 ROJO DA291C */
+/* Root Styles naranja FF7F50 ROJO DA291C GREEN:008B76 GRENDIFERENT:  */
 .root {
     -color-primary: #FF7F50;
-    -fx-background-color: #fafafa;
+    -color-primary-dark: derive(-color-primary, -10%);  /* 10% más oscuro que el color primario */
+    -color-primary-darker: derive(-color-primary, -20%); /* 20% más oscuro */
+    -color-primary-light: derive(-color-primary, 10%);  /* 10% más claro */
+    -color-primary-lighter: derive(-color-primary, 20%); /* 20% más claro */
+
+    /* Para el color de error, podrías mantenerlo independiente o derivarlo también */
+    -color-error: #DA291C;
+
+    -fx-background-color: #f4f4f5;
     -fx-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
@@ -297,4 +305,111 @@
 .button-white:hover {
     -fx-border-color: -color-primary;
     -fx-text-fill: -color-primary;
+}
+
+/* Login Container */
+.login-container {
+    -fx-background-color: white;
+    -fx-background-radius: 12px;
+    -fx-padding: 40px;
+    -fx-max-width: 440px;
+    -fx-alignment: center;
+}
+
+/* Header Styling */
+.login-header {
+    -fx-padding: 0 0 16px 0;
+}
+
+.logo-container {
+    -fx-background-color: transparent;
+    -fx-background-radius: 16px;
+    -fx-padding: 16px;
+    -fx-pref-width: 64px;
+    -fx-pref-height: 64px;
+    -fx-alignment: center;
+}
+
+.logo-icon {
+    -fx-fill: -color-primary;
+    -fx-scale-x: 2;
+    -fx-scale-y: 2;
+}
+
+.app-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #18181b;
+}
+
+.login-subtitle {
+    -fx-font-size: 16px;
+    -fx-text-fill: #71717a;
+    -fx-font-weight: 500;
+}
+
+/* Form Container */
+.form-container {
+    -fx-padding: 8px 0;
+    -fx-max-width: 360px;
+}
+
+.field-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #3f3f46;
+}
+
+.input-field {
+    -fx-background-color: white;
+    -fx-border-color: #e4e4e7;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 12px 16px;
+    -fx-font-size: 14px;
+    -fx-prompt-text-fill: #a1a1aa;
+    /* Add these properties to prevent the jumping */
+    -fx-border-width: 2px;
+    -fx-border-color: #E6E6E6;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+}
+
+.input-field:focused {
+    -fx-border-color: -color-primary;
+    -fx-border-width: 2px;
+}
+
+.input-field:hover {
+    -fx-border-color: -color-primary;
+    -fx-border-width: 2px;
+}
+
+/* Error Message */
+.error-message {
+    -fx-text-fill: -color-error;
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+    -fx-padding: 8px 0;
+    -fx-max-width: 360px;
+}
+
+/* Login Button */
+.login-button {
+    -fx-background-color: -color-primary;
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+    -fx-font-size: 14px;
+    -fx-padding: 16px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-max-width: 360px;
+}
+
+.login-button:hover {
+    -fx-background-color: -color-primary-dark;
+}
+
+.login-button:pressed {
+    -fx-background-color: derive(-color-primary-dark, -10%);
 }

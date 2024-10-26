@@ -1,6 +1,7 @@
 package data;
 
 import application.Logic;
+import application.ServiceViewGUIController;
 import domain.Meal;
 import domain.Recharge;
 import domain.User;
@@ -12,9 +13,9 @@ import java.util.List;
 
 public class LogicSockect {
 
-public static boolean us_confirm;
-public static ArrayList<Meal> meals = new ArrayList<>();
-public static ArrayList<Recharge> recharges = new ArrayList<>();
+    public static boolean us_confirm;
+    public static ArrayList<Meal> meals = new ArrayList<>();
+    public static ArrayList<Recharge> recharges = new ArrayList<>();
 
 
     public static List<String> separarPalabras(String texto) {
@@ -24,10 +25,36 @@ public static ArrayList<Recharge> recharges = new ArrayList<>();
         return new ArrayList<>(Arrays.asList(palabrasArray));
     }
 
+    private static ServiceViewGUIController serviceController;
+    private static int expectedMealCount = 0;
+
+    public static void setServiceController(ServiceViewGUIController controller) {
+        serviceController = controller;
+    }
+
+    public synchronized static void setListMeals(String meal) {
+        String[] mealData = meal.split(",");
+        meals.add(new Meal(mealData[1], Integer.parseInt(mealData[2])));
+
+        if (serviceController != null) {
+            serviceController.onMealReceived();
+        }
+    }
+
+    public synchronized static void setExpectedMealCount(int count) {
+        expectedMealCount = count;
+    }
+
+    public synchronized static int getExpectedMealCount() {
+        return expectedMealCount;
+    }
+
     public static void fullUser(String user) {
         if (Logic.user == null) {
             Logic.user = new User();  // Asegurar la inicialización
         }
+
+
 
         Logic.user.setCarnet(user.split(",")[2]);
         Logic.user.setNombre(user.split(",")[3]);
@@ -64,15 +91,6 @@ public static ArrayList<Recharge> recharges = new ArrayList<>();
         }
 
         return user;
-    }
-
-    public synchronized static void setListMeals(String meal){
-
-        String[] mealData = meal.split(",");
-
-        meals.add(new Meal(mealData[1],Integer.parseInt(mealData[2])));
-        System.out.println(mealData[1] +" "+Integer.parseInt(mealData[2]) + "probando si esta bien");
-        System.out.println(meals);
     }
 
     public synchronized static void setListMealsOrder(String meal){

@@ -59,6 +59,13 @@ public class ServiceViewGUIController {
     private static final int LOAD_TIMEOUT = 10000;
     private static final int MAX_RETRIES = 3;
 
+    private static final int MEAL_RECEIVE_TIMEOUT = 1000; // 1 segundo de espera entre comidas
+    private static final int INITIAL_WAIT = 500; // Espera inicial para comenzar a recibir comidas
+    private final Object mealsLock = new Object();
+    private volatile boolean isReceivingMeals = false;
+    private long lastMealReceived = 0;
+    private int previousMealCount = 0;
+
     private volatile boolean isLoadingMeals = false;
     private final Object loadLock = new Object();
     private Timer loadingTimer;
@@ -240,7 +247,8 @@ public class ServiceViewGUIController {
 
     private void updateGrid() {
         String selectedDay = cbReservationDay.getValue();
-        String selectedMealType = mealTimeGroup.getSelectedToggle() != null ? (String) mealTimeGroup.getSelectedToggle().getUserData() : null;
+        String selectedMealType = mealTimeGroup.getSelectedToggle() != null ?
+                (String) mealTimeGroup.getSelectedToggle().getUserData() : null;
 
         if (selectedDay == null || selectedMealType == null) {
             Platform.runLater(mealsGrid.getChildren()::clear);
@@ -253,21 +261,24 @@ public class ServiceViewGUIController {
             isLoadingMeals = true;
         }
 
-        Platform.runLater(() -> {
-            mealsGrid.getChildren().clear();
-            VBox loadingBox = new VBox(10);
-            loadingBox.setAlignment(Pos.CENTER);
-            loadingBox.getChildren().addAll(new ProgressIndicator(), new Label("Loading meals..."));
-            mealsGrid.add(loadingBox, 1, 1);
-        });
+        showLoadingIndicator();
 
         CompletableFuture.supplyAsync(() -> {
             try {
                 synchronized (LogicSockect.meals) {
                     LogicSockect.meals.clear();
                 }
+                isReceivingMeals = true;
+                lastMealReceived = System.currentTimeMillis();
+                previousMealCount = 0;
+
+                // Solicitar las comidas
                 SocketClient.sendMessage("listMeals," + selectedDay + "," + selectedMealType);
-                return waitForMeals();
+
+                // Espera inicial para que comiencen a llegar las comidas
+                Thread.sleep(INITIAL_WAIT);
+
+                return waitForCompleteMealSet();
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -275,6 +286,89 @@ public class ServiceViewGUIController {
         }).thenAcceptAsync(this::processReceivedMeals, Platform::runLater);
 
         startLoadingTimeout();
+    }
+
+    private List<Meal> waitForCompleteMealSet() throws InterruptedException {
+        long startTime = System.currentTimeMillis();
+        List<Meal> receivedMeals = null;
+        boolean complete = false;
+
+        while (System.currentTimeMillis() - startTime < LOAD_TIMEOUT && retryCount < MAX_RETRIES && !complete) {
+            synchronized (LogicSockect.meals) {
+                int currentMealCount = LogicSockect.meals.size();
+
+                // Si hay nuevas comidas, actualizar el tiempo de última recepción
+                if (currentMealCount > previousMealCount) {
+                    lastMealReceived = System.currentTimeMillis();
+                    previousMealCount = currentMealCount;
+                }
+
+                // Verificar si el conjunto está completo
+                if (!LogicSockect.meals.isEmpty() &&
+                        System.currentTimeMillis() - lastMealReceived > MEAL_RECEIVE_TIMEOUT) {
+                    receivedMeals = (List<Meal>) new ArrayList<>(LogicSockect.getListMeals());
+                    complete = true;
+                } else if (System.currentTimeMillis() - lastMealReceived > MEAL_RECEIVE_TIMEOUT * 2) {
+                    // Si ha pasado mucho tiempo sin recibir nuevas comidas, reintentar
+                    retryCount++;
+                    if (retryCount < MAX_RETRIES) {
+                        LogicSockect.meals.clear();
+                        previousMealCount = 0;
+                        SocketClient.sendMessage("listMeals," + cbReservationDay.getValue() + ","
+                                + mealTimeGroup.getSelectedToggle().getUserData());
+                        lastMealReceived = System.currentTimeMillis();
+                    }
+                }
+            }
+            Thread.sleep(100);
+        }
+
+        isReceivingMeals = false;
+        return receivedMeals;
+    }
+
+    private void processReceivedMeals(List<Meal> finalMeals) {
+        try {
+            mealsGrid.getChildren().clear();
+            mealCardMap.clear();
+
+            if (finalMeals != null && !finalMeals.isEmpty()) {
+                System.out.println("Received " + finalMeals.size() + " meals total");
+                displayMealsInGrid(finalMeals);
+                syncSelectionWithCart(finalMeals);
+            } else {
+                if (retryCount >= MAX_RETRIES) {
+                    showErrorMessage("Failed to load meals after " + MAX_RETRIES + " attempts. Please try again.");
+                } else {
+                    showNoMealsMessage();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorMessage("Error displaying meals: " + e.getMessage());
+        } finally {
+            synchronized (loadLock) {
+                isLoadingMeals = false;
+                retryCount = 0;
+            }
+        }
+    }
+
+    private void showLoadingIndicator() {
+        Platform.runLater(() -> {
+            mealsGrid.getChildren().clear();
+            VBox loadingBox = new VBox(10);
+            loadingBox.setAlignment(Pos.CENTER);
+            ProgressIndicator progress = new ProgressIndicator();
+            Label loadingLabel = new Label("Loading meals...");
+            loadingBox.getChildren().addAll(progress, loadingLabel);
+            mealsGrid.add(loadingBox, 1, 1);
+        });
+    }
+
+    // Método para ser llamado desde LogicSocket cuando se recibe una nueva comida
+    public void onMealReceived() {
+        lastMealReceived = System.currentTimeMillis();
     }
 
     private List<Meal> waitForMeals() throws InterruptedException {
@@ -299,32 +393,6 @@ public class ServiceViewGUIController {
             Thread.sleep(100);
         }
         return receivedMeals;
-    }
-
-    private void processReceivedMeals(List<Meal> finalMeals) {
-        try {
-            mealsGrid.getChildren().clear();
-            mealCardMap.clear();
-
-            if (finalMeals != null && !finalMeals.isEmpty()) {
-                displayMealsInGrid(finalMeals);
-                syncSelectionWithCart(finalMeals);
-            } else {
-                if (retryCount >= MAX_RETRIES) {
-                    showErrorMessage("Failed to load meals after " + MAX_RETRIES + " attempts. Please try again.");
-                } else {
-                    showNoMealsMessage();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            showErrorMessage("Error displaying meals: " + e.getMessage());
-        } finally {
-            synchronized (loadLock) {
-                isLoadingMeals = false;
-                retryCount = 0;
-            }
-        }
     }
 
     private void syncSelectionWithCart(List<Meal> currentMeals) {
