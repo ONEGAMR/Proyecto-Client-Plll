@@ -4,7 +4,7 @@ public class Meal {
 
 	private String name;
 	private int price;
-	private int cantidad;
+	private int Quantity;
 	private int totalOrder;
 
 	public Meal(String name, int price) {
@@ -13,7 +13,7 @@ public class Meal {
 	}
 	public Meal(String name, int cantidad, int totalOrder) {
 		this.name = name;
-		this.cantidad = cantidad;
+		this.Quantity = cantidad;
 		this.totalOrder = totalOrder;
 	}
 
@@ -33,13 +33,14 @@ public class Meal {
 		this.price = price;
 	}
 
-	public int getCantidad() {
-		return cantidad;
+	public int getQuantity() {
+		return Quantity;
 	}
 
-	public void setCantidad(int cantidad) {
-		this.cantidad = cantidad;
+	public void setQuantity(int quantity) {
+		Quantity = quantity;
 	}
+
 	public int getTotalOrder() {
 		return totalOrder;
 	}
@@ -48,10 +49,10 @@ public class Meal {
 	}
 
 	public String toStringPedido() {
-		return name + "," + cantidad +","+ totalOrder;
+		return name + "," + Quantity +","+ totalOrder;
 	}
 
 	public String toStringPedidoForList() {
-		return name + " Cantidad del pedido" + cantidad +" Total: "+ totalOrder;
+		return name + " Cantidad del pedido" + Quantity +" Total: "+ totalOrder;
 	}
 }

@@ -28,7 +28,7 @@ public class GUIController {
 	// Event Listener on Button[#btEnter].onAction
 	@FXML
 	public void initialize() {
-		SocketClient.connectToServer("localhost");
+		SocketClient.connectToServer("192.168.0.143");
 	}
 	
 	@FXML

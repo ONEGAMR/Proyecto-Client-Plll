@@ -9,6 +9,8 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
+import java.io.File;
 
 public class UpdateStudentGUIController {
 
@@ -18,16 +20,44 @@ public class UpdateStudentGUIController {
     @FXML private TextField tfPhone;
     @FXML private TextField tfPassword;
     @FXML private TextField tfRoutePhoto;
+    @FXML private Button btnSelectPhoto;
 
     @FXML private CheckBox cbIsActive;
     @FXML private TextField tfAvailableMoney;
     @FXML private Label lbErrorMessage;
     @FXML private Button btReturn;
     @FXML private Button btEdit;
+    @FXML private Button getBtnSelectPhoto;
+
+    @FXML
+    public void handleSelectPhoto(ActionEvent event) {
+        if (btnSelectPhoto == null) {
+            lbErrorMessage.setText("Button for selecting photo is not initialized.");
+            lbErrorMessage.setTextFill(Color.RED);
+            return;
+        }
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select Profile Picture");
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif")
+        );
+
+        File selectedFile = fileChooser.showOpenDialog(btnSelectPhoto.getScene().getWindow());
+
+        if (selectedFile != null) {
+            try {
+                String filePath = selectedFile.getAbsolutePath();
+                tfRoutePhoto.setText(filePath);
+                Logic.notifyAction("Profile picture path updated successfully!", lbErrorMessage, Color.GREEN);
+            } catch (Exception e) {
+                Logic.notifyAction("Could not set the selected image path. Please try again.", lbErrorMessage, Color.RED);
+            }
+        }
+    }
 
     @FXML
     public void handleReturnAction(ActionEvent event) {
-
         Logic.closeWindows(btReturn,"/presentation/MainGUI.fxml");
     }
 
@@ -43,11 +73,11 @@ public class UpdateStudentGUIController {
         double availableMoney = Logic.parseDouble(tfAvailableMoney.getText());
 
         if (phone == -1) {
-        	Logic.notifyAction("Número de teléfono inválido",lbErrorMessage, Color.RED);
+            Logic.notifyAction("Número de teléfono inválido",lbErrorMessage, Color.RED);
             return;
         }
         if (availableMoney == -1.0) {
-        	Logic.notifyAction("Cantidad de dinero disponible inválida", lbErrorMessage,Color.RED);
+            Logic.notifyAction("Cantidad de dinero disponible inválida", lbErrorMessage,Color.RED);
             return;
         }
 
@@ -62,20 +92,18 @@ public class UpdateStudentGUIController {
 
         // Confirma la acción antes de guardar
         if (Logic.showConfirmationAlert("¿Estás seguro de que deseas guardar los cambios?", "Confirmación")) {
-
             SocketClient.sendMessage("updateUser,"+Logic.user.toStringUserData());
 
             Logic.sleepTConfirm();
 
             if (LogicSockect.confirm()) {
-
                 Logic.notifyAction("Estudiante actualizado con éxito", lbErrorMessage, Color.GREEN);
                 Logic.closeWindows(btReturn,"/presentation/MainGUI.fxml");
             } else {
                 Logic.notifyAction("Error al actualizar el estudiante",lbErrorMessage, Color.RED);
             }
         } else {
-        	Logic.notifyAction("Operación cancelada", lbErrorMessage, Color.ORANGE);
+            Logic.notifyAction("Operación cancelada", lbErrorMessage, Color.ORANGE);
         }
     }
 
