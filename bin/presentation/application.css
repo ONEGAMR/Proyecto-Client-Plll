@@ -1,0 +1,300 @@
+/* Root Styles naranja FF7F50 ROJO DA291C */
+.root {
+    -color-primary: #FF7F50;
+    -fx-background-color: #fafafa;
+    -fx-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ScrollPane Customization */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-padding: 0;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Scrollbar Customization */
+.scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 12;
+    -fx-padding: 0 2;
+}
+
+.scroll-pane .scroll-bar:vertical .track {
+    -fx-background-color: #f0f0f0;
+    -fx-background-radius: 6;
+}
+
+.scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: #c0c0c0;
+    -fx-background-radius: 6;
+}
+
+.scroll-pane .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #a0a0a0;
+}
+
+/* Header Styling */
+.header {
+    -fx-background-color: -color-primary;
+    -fx-padding: 16px 24px;
+}
+
+.label-Title {
+    -fx-font-size: 20px;
+    -fx-font-weight: 800;
+    -fx-text-fill: white;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.header-icon {
+    -fx-fill: white;
+}
+
+/* User Profile Section */
+.user-name {
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+    -fx-text-fill: white;
+}
+
+.user-balance {
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-text-fill: rgba(255, 255, 255, 0.9);
+}
+
+.user-avatar {
+    -fx-stroke: -color-primary;
+    -fx-stroke-width: 1;
+    -fx-fill: transparent;
+}
+
+/* Profile Section */
+.profile-container {
+    -fx-background-color: white;
+    -fx-border-color: #f0f0f0;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 24px;
+}
+
+/* Selection Section */
+.selection-row {
+    -fx-alignment: CENTER_LEFT;
+}
+
+.label-Subjet-Title {
+    -fx-font-size: 14px;
+    -fx-text-fill: #303036;
+    -fx-font-weight: 600;
+}
+
+/* Radio Button Styling */
+.meal-radio {
+    -fx-font-size: 14px;
+    -fx-text-fill: #52525b;
+    -fx-font-weight: 600;
+}
+
+.meal-radio .radio {
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 100%;
+    -fx-border-width: 2px;
+    -fx-padding: 4px;
+}
+
+.meal-radio:hover .radio {
+    -fx-border-color: -color-primary;
+}
+
+.meal-radio:selected .radio {
+    -fx-background-color: -color-primary;
+    -fx-border-color: transparent;
+}
+
+.meal-radio .dot {
+    -fx-background-color: transparent;
+    -fx-padding: 2px;
+}
+
+.meal-radio:selected .dot {
+    -fx-background-color: transparent;
+}
+
+/* ComboBox Styling */
+.comboBox-normal {
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 8px;
+    -fx-font-size: 14px;
+}
+
+.comboBox-normal:hover {
+    -fx-border-color: -color-primary;
+}
+
+.comboBox-normal .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.comboBox-normal .arrow {
+    -fx-background-color: #666666;
+}
+
+/* Meal Cards Grid */
+.table-container {
+    -fx-background-color: transparent;
+    -fx-padding: 8 16 8 24;
+}
+
+.meals-grid {
+    -fx-background-color: transparent;
+    -fx-hgap: 12px;
+    -fx-vgap: 12px;
+    -fx-padding: 16px 0;
+}
+
+
+.meal-card {
+    -fx-background-color: white;
+    -fx-border-color: #f0f0f0;
+    -fx-border-width: 1px;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-cursor: hand;
+    -fx-spacing: 8px;
+}
+
+.meal-card:hover {
+    -fx-background-color: #fafafa;
+}
+
+.meal-card.selected {
+    -fx-background-color: #fff5f5;
+    -fx-border-color: -color-primary;
+    -fx-border-width: 1.5px;
+}
+
+.meal-name {
+    -fx-font-size: 14px;
+    -fx-text-fill: #2c2c2c;
+}
+
+.meal-price {
+    -fx-font-size: 14px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #2c2c2c;
+    -fx-alignment: CENTER_RIGHT;
+}
+
+/* Order Items Styling */
+.order-item {
+    -fx-background-color: transparent;
+    -fx-background-radius: 6px;
+    -fx-padding: 8 0 0 0px;
+    -fx-spacing: 12px;
+}
+
+.order-item VBox {
+    -fx-spacing: 4px;
+}
+
+.order-item Label {
+    -fx-text-fill: #52525b;
+    -fx-font-weight: 600;
+    -fx-font-size: 13px;
+}
+
+/* Quantity Control Styling */
+.order-item Button {
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-min-width: 24px;
+    -fx-min-height: 24px;
+    -fx-padding: 0;
+    -fx-content-display: center;
+    -fx-alignment: center;
+}
+
+.order-item Button:hover {
+    -fx-border-color: -color-primary;
+    -fx-text-fill: -color-primary;
+}
+
+.order-item HBox Label {
+    -fx-min-width: 24px;
+    -fx-alignment: center;
+}
+
+/* Order Summary Sidebar */
+.order-summary-sidebar {
+    -fx-background-color: white;
+    -fx-border-color: #f0f0f0;
+    -fx-border-width: 0 0 0 1;
+}
+
+.order-summary-content {
+    -fx-padding: 8 24 24 24px;
+}
+
+.order-summary-footer {
+    -fx-padding: 24px;
+    -fx-border-color: #f0f0f0;
+    -fx-border-width: 1 0 0 0;
+    -fx-background-color: white;
+    -fx-spacing: 8px;
+}
+
+.price-summary {
+    -fx-padding: 0 0 16px 0;
+    -fx-spacing: 8px;
+}
+
+.label-subtotal, .label-tax {
+    -fx-font-size: 13px;
+    -fx-text-fill: #666666;
+}
+
+.label-total {
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #2c2c2c;
+}
+
+/* Buttons */
+.button-red {
+    -fx-background-color: -color-primary;
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+    -fx-font-size: 12px;
+    -fx-padding: 14px;
+    -fx-background-radius: 6px;
+}
+
+.button-red:hover {
+    -fx-background-color: derive(-color-primary, -10%);
+}
+
+.button-white {
+-fx-font-size: 12px;
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-text-fill: #2c2c2c;
+    -fx-font-weight: 600;
+    -fx-padding: 14px;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+}
+
+.button-white:hover {
+    -fx-border-color: -color-primary;
+    -fx-text-fill: -color-primary;
+}

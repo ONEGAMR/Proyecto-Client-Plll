@@ -62,6 +62,7 @@
 						<Insets left="10.0" />
 					</HBox.margin>
 				</Button>
+            <Button fx:id="btnSelectPhoto" layoutX="154.0" layoutY="10.0" onAction="#handleSelectPhoto" styleClass="button-white" text="foto" />
 				<VBox.margin>
 					<Insets />
 				</VBox.margin>
