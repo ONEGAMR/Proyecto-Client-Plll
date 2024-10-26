@@ -105,9 +105,9 @@ public class ServiceViewGUIController {
             LogicSockect.meals.clear();
             menuAnterior = nuevoMenu; // Actualizar el menú anterior
         }
-
+//pedir el menu
         SocketClient.sendMessage("listMeals,"+selectedDay+","+selectedMealType);
-
+//tiempo para cargar la lista
         Logic.sleepTList("meals");
 
         Platform.runLater(() -> {
@@ -149,6 +149,7 @@ public class ServiceViewGUIController {
             meal.setCantidad(1);
             meal.setTotalOrder(1*meal.getPrice());
 
+            //se manda el pedido
             SocketClient.sendMessage("foodOrder,"+meal.toStringPedido()+","+Logic.user.getCarnet()+","+Logic.user.getDineroDisponible());
             Logic.showAlert(AlertType.INFORMATION, "Pedido Confirmado", "Pedido realizado con éxito. Nuevo saldo: ₡" + Logic.user.getDineroDisponible());
         }
