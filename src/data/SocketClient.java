@@ -12,15 +12,15 @@ import javafx.application.Platform;
 
 public class SocketClient {
 
-	private static String HOST;
+    private static String HOST;
     private static final int PUERTO = 12345;
-    private static PrintWriter salida;  
-    private static BufferedReader entrada;  
+    private static PrintWriter salida;
+    private static BufferedReader entrada;
     private static Socket socket;
     public static int validate;
 
     public static void reset() {
-    	validate = 0;
+        validate = 0;
     }
 
     public static void setValidate(int validate) {
@@ -29,8 +29,8 @@ public class SocketClient {
 
     // Método estático para conectarse al servidor y comenzar a escuchar mensajes
     public static void connectToServer(String host) {
-    	HOST = host;
-    	new Thread(() -> { initThread(); receiveMessages();}).start();
+        HOST = host;
+        new Thread(() -> { initThread(); receiveMessages();}).start();
     }
 
     // Método estático para enviar un mensaje al servidor
@@ -54,7 +54,7 @@ public class SocketClient {
             System.out.println("Error al conectar con el servidor: " + e.getMessage());
         }
     }
-    
+
     public synchronized static void receiveMessages() {
 
         while (true) {
