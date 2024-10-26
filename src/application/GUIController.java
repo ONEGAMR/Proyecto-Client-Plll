@@ -49,7 +49,8 @@ public class GUIController {
 
 				Logic.notifyAction(LogicSockect.validateUser(), message, Color.RED);
 			}else{
-				System.out.println(Logic.user.toString());
+
+				System.out.println(Logic.user.toString() +" llega y llena en GUIcontroller");
 				Logic.closeWindows(btEnter,"/presentation/MainGUI.fxml");
 			}
 		}else{

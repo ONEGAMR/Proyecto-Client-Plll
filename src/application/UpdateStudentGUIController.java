@@ -17,6 +17,7 @@ public class UpdateStudentGUIController {
     @FXML private TextField tfEmail;
     @FXML private TextField tfPhone;
     @FXML private TextField tfPassword;
+    @FXML private TextField tfRoutePhoto;
 
     @FXML private CheckBox cbIsActive;
     @FXML private TextField tfAvailableMoney;
@@ -57,6 +58,7 @@ public class UpdateStudentGUIController {
         Logic.user.setEstaActivo(cbIsActive.isSelected());
         Logic.user.setDineroDisponible(availableMoney);
         Logic.user.setPassword(tfPassword.getText());
+        Logic.user.setRoutePhoto(tfRoutePhoto.getText());
 
         // Confirma la acción antes de guardar
         if (Logic.showConfirmationAlert("¿Estás seguro de que deseas guardar los cambios?", "Confirmación")) {
@@ -84,6 +86,7 @@ public class UpdateStudentGUIController {
         if (tfAvailableMoney.getText().trim().isEmpty()) return "La cantidad de dinero disponible no puede estar vacía";
         if (!tfPhone.getText().matches("\\d{8,10}")) return "El número de teléfono debe tener entre 8 y 10 dígitos";
         if(tfPassword.getText().trim().isEmpty()) return "La contraseña no puede estar vacía";
+        if(tfRoutePhoto.getText().trim().isEmpty()) return "Sin ruta de la foto";
         try {
             double money = Double.parseDouble(tfAvailableMoney.getText());
             if (!Logic.isValidBalance(money, 5000, 15000)) {
@@ -106,6 +109,7 @@ public class UpdateStudentGUIController {
             cbIsActive.setSelected(Logic.user.isEstaActivo());
             tfAvailableMoney.setText(String.valueOf(Logic.user.getDineroDisponible()));
             tfPassword.setText(Logic.user.getPassword());
+            tfRoutePhoto.setText(Logic.user.getRoutePhoto());
         } else {
             lbErrorMessage.setText("No hay datos de estudiante disponibles.");
         }

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="511.0" prefWidth="700.0" styleClass="anchorPane" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ServiceViewGUIController">
+	<children>
+		<VBox layoutX="31.2" prefHeight="454.0" prefWidth="639.0" spacing="20" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="31.0" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="20">
+			<HBox alignment="CENTER_LEFT" spacing="10.0">
+				<children>
+					<Label styleClass="label-Title" text="Reservación de Alimentos" />
+					<Label styleClass="label-Normal" text="(Solo usuarios activos)" />
+				</children>
+			</HBox>
+			<Line endX="640.0" style="-fx-stroke: #e0e0e0; -fx-stroke-width: 1;" />
+			<HBox alignment="CENTER_LEFT" spacing="20">
+				<VBox spacing="5" />
+				<VBox spacing="5">
+					<Label styleClass="label-Subjet-Title" text="Seleccione el día para reservar:">
+						<padding>
+							<Insets bottom="5.0" />
+						</padding>
+					</Label>
+					<ComboBox fx:id="cbReservationDay" prefWidth="200" promptText="Seleccione el día a reservar" styleClass="comboBox-normal" />
+				</VBox>
+				<VBox spacing="5">
+					<Label styleClass="label-Subjet-Title" text="Horario de la reservación">
+						<VBox.margin>
+							<Insets />
+						</VBox.margin>
+						<padding>
+							<Insets bottom="5.0" />
+						</padding>
+					</Label>
+					<HBox spacing="20.0">
+						<RadioButton fx:id="rbBreakfast" selected="true" text="Desayuno">
+							<toggleGroup>
+								<ToggleGroup fx:id="mealTimeGroup" />
+							</toggleGroup>
+						</RadioButton>
+						<RadioButton fx:id="rbLunch" text="Almuerzo" toggleGroup="$mealTimeGroup" />
+                  <VBox.margin>
+                     <Insets top="5.0" />
+                  </VBox.margin>
+					</HBox>
+				</VBox>
+            <Label />
+            <Label fx:id="lbName" />
+			</HBox>
+			<TableView fx:id="tvMeals" prefHeight="20.0" prefWidth="639.0" styleClass="table" VBox.vgrow="ALWAYS">
+				<columns>
+					<TableColumn fx:id="colMealName" prefWidth="350.0" style="-fx-alignment: CENTER;" text="Alimento" />
+					<TableColumn fx:id="colPrice" prefWidth="120.0" style="-fx-alignment: CENTER;" text="Precio" />
+					<TableColumn fx:id="colRequest" prefWidth="160.0" style="-fx-alignment: CENTER;" text="Solicitar" />
+				</columns>
+				<placeholder>
+					<Label fx:id="lbEmptyTable" style="-fx-text-fill: #757575; -fx-font-style: italic;" text="Tabla sin contenido" />
+				</placeholder>
+            <columnResizePolicy>
+               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
+			</TableView>
+			<HBox alignment="CENTER" prefHeight="30.0" prefWidth="639.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+				<HBox alignment="CENTER_LEFT" prefHeight="30.0">
+					<Button fx:id="btReturn" onAction="#handleReturnAction" styleClass="button-white" text="Regresar" HBox.hgrow="ALWAYS" />
+				</HBox>
+				<HBox prefHeight="30.0" spacing="10" HBox.hgrow="ALWAYS" />
+				<HBox alignment="CENTER_RIGHT" prefHeight="30.0" />
+			</HBox>
+		</VBox>
+	</children>
+</AnchorPane>

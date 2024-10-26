@@ -13,6 +13,8 @@ public class User {
     private char genero;
     private double dineroDisponible;
     private String password;
+    private String typeUser;
+    private String routePhoto;
 
     public User() {}
 
@@ -115,6 +117,22 @@ public class User {
         this.password = password;
     }
 
+    public void setTypeUser(String typeUser) {
+        this.typeUser = typeUser;
+    }
+
+    public String getTypeUser() {
+        return typeUser;
+    }
+
+    public String getRoutePhoto() {
+        return routePhoto;
+    }
+
+    public void setRoutePhoto(String routePhoto) {
+        this.routePhoto = routePhoto;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -127,11 +145,13 @@ public class User {
                 ", genero=" + genero +
                 ", dineroDisponible=" + dineroDisponible +
                 ", password=" + password +
+                ", typeUser=" + typeUser +
+                ", routePhoto=" + routePhoto +
                 '}';
     }
     public String toStringUserData() {
         return
                 carnet + "," + nombre + "," + correoElectronico + "," +
-                        telefono + "," + estaActivo + "," + fechaIngreso + "," + genero + "," + dineroDisponible+","+password;
+                        telefono + "," + estaActivo + "," + fechaIngreso + "," + genero + "," + dineroDisponible+","+password+","+typeUser + "," + routePhoto;
     }
 }

@@ -2,6 +2,7 @@ package data;
 
 import application.Logic;
 import domain.Meal;
+import domain.Recharge;
 import domain.User;
 
 import java.time.LocalDate;
@@ -13,7 +14,8 @@ public class LogicSockect {
 
 public static boolean us_confirm;
 public static ArrayList<Meal> meals = new ArrayList<>();
-private static String beforeRoute;
+public static ArrayList<Recharge> recharges = new ArrayList<>();
+
 
     public static List<String> separarPalabras(String texto) {
         // Usa el método split() para separar por comas
@@ -36,9 +38,11 @@ private static String beforeRoute;
         Logic.user.setGenero(user.split(",")[8].charAt(0));
         Logic.user.setDineroDisponible(Double.parseDouble(user.split(",")[9]));
         Logic.user.setPassword(user.split(",")[10]);
+        Logic.user.setTypeUser(user.split(",")[11]);
+        Logic.user.setRoutePhoto(user.split(",")[12]);
     }
 
-    public static String validateUser() {
+    public synchronized static String validateUser() {
 
         String user = null;
 
@@ -50,6 +54,14 @@ private static String beforeRoute;
             user = "Contraseña incorrecta";
         }
 
+        if(Logic.user != null && !Logic.user.getTypeUser().equals("estudiante")){
+
+            SocketClient.setValidate(-2);
+        }
+
+        if(SocketClient.validate == -2) {
+            user = "El perfil no pertenece a un estudiante";
+        }
 
         return user;
     }
@@ -61,6 +73,24 @@ private static String beforeRoute;
         meals.add(new Meal(mealData[1],Integer.parseInt(mealData[2])));
         System.out.println(mealData[1] +" "+Integer.parseInt(mealData[2]) + "probando si esta bien");
         System.out.println(meals);
+    }
+
+    public synchronized static void setListMealsOrder(String meal){
+
+        String[] mealData = meal.split(",");
+        System.out.println(mealData[1] +" "+Integer.parseInt(mealData[2])+" "+Integer.parseInt(mealData[3])+"  Esto llega");
+        meals.add(new Meal(mealData[1],Integer.parseInt(mealData[2]),Integer.parseInt(mealData[3])));
+        System.out.println(meals);
+    }
+
+    public synchronized static void setListRecharge(String recharge){
+
+        String[] rechargeData = recharge.split(",");
+
+        recharges.add(new Recharge(Double.parseDouble(rechargeData[1]),LocalDate.parse(rechargeData[2])));
+    }
+    public synchronized static ArrayList<?> getListRecharges(){
+        return recharges;
     }
 
     public synchronized static ArrayList<?> getListMeals(){

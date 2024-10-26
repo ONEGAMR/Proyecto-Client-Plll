@@ -28,7 +28,7 @@ public class MainGUIController {
 	// Event Listener on Button[#btVerSaldo].onAction
 	@FXML
 	public void verSaldo(ActionEvent event) {
-
+		Logic.closeWindows(btVerSaldo,"/presentation/BalanceInquiryGUI.fxml");
 	}
 	// Event Listener on Button[#btAgregarEstudiante].onAction
 	@FXML
@@ -39,5 +39,6 @@ public class MainGUIController {
 	@FXML
 	public void verPerdidos(ActionEvent event) {
 
+		Logic.closeWindows(btVerPedidos,"/presentation/ShowOrders.fxml");
 	}
 }

@@ -1,5 +1,6 @@
 package application;
 
+
 import data.LogicSockect;
 import data.SocketClient;
 import javafx.application.Platform;
@@ -26,6 +27,7 @@ public class ServiceViewGUIController {
     @FXML private Label lbEmptyTable;
     @FXML private Button btReturn;
 
+    private String menuAnterior = "";
     @FXML
     public void initialize() {
         setupComboBoxes();
@@ -95,9 +97,18 @@ public class ServiceViewGUIController {
         }
 
         //Enviar el dia y tipo de comida y recibir las comidas y solicitar las comidas
+        String nuevoMenu = selectedDay + " - " + selectedMealType;
 
+        // Verificar si el nuevo menú es diferente al anterior
+        if (!nuevoMenu.equals(menuAnterior)) {
+            System.out.println("Nuevo menú seleccionado: " + nuevoMenu);
+            LogicSockect.meals.clear();
+            menuAnterior = nuevoMenu; // Actualizar el menú anterior
+        }
 
         SocketClient.sendMessage("listMeals,"+selectedDay+","+selectedMealType);
+
+        Logic.sleepTList("meals");
 
         Platform.runLater(() -> {
 
@@ -111,16 +122,6 @@ public class ServiceViewGUIController {
                 lbEmptyTable.setVisible(true);
             }
         });
-
-
-//        if (LogicSockect.getListMeals() != null) {
-//            List<Meal> meals = (List<Meal>) LogicSockect.getListMeals();
-//            tvMeals.setItems(FXCollections.observableArrayList(meals));
-//            lbEmptyTable.setVisible(meals.isEmpty());
-//        } else {
-//            tvMeals.setItems(FXCollections.observableArrayList());
-//            lbEmptyTable.setVisible(true);
-//        }
     }
 
     // Maneja la solicitud de una comida
@@ -137,14 +138,18 @@ public class ServiceViewGUIController {
         boolean isConfirmed = Logic.showConfirmationAlert(
                 "¿Deseas solicitar esta comida?",
                 "Confirmación de Compra"
+
         );
 
         if (isConfirmed) {
             Logic.user.setDineroDisponible(availableMoney - mealPrice);
 
-            //enviar mensaje de actualizar al user por gastar dinero
-           // StudentData.updateStudent(selectedStudent);
 
+            //enviar datos del pedido y el nuevo saldo del usuario
+            meal.setCantidad(1);
+            meal.setTotalOrder(1*meal.getPrice());
+
+            SocketClient.sendMessage("foodOrder,"+meal.toStringPedido()+","+Logic.user.getCarnet()+","+Logic.user.getDineroDisponible());
             Logic.showAlert(AlertType.INFORMATION, "Pedido Confirmado", "Pedido realizado con éxito. Nuevo saldo: ₡" + Logic.user.getDineroDisponible());
         }
     }

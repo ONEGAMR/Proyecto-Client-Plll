@@ -16,6 +16,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
+
 public class Logic {
 
 	public static User user;
@@ -74,6 +76,31 @@ public class Logic {
 		try {
 			// Esperar hasta 1 segundo para asegurarse de que us_confirm se actualice
 			while (!LogicSockect.confirm() && retries < 10) {
+				Thread.sleep(100);  // Esperar 100 ms
+				retries++;
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void sleepTList(String typeList){
+		int retries = 0;
+		ArrayList<?> list = new ArrayList<>();
+
+		if(typeList.equals("meals")){
+
+			list = LogicSockect.meals;
+		}
+		if(typeList.equals("recharges")){
+
+			list = LogicSockect.recharges;
+		}
+
+		try {
+			// Esperar hasta 1 segundo para asegurarse de que us_confirm se actualice
+			while (list.isEmpty() && retries < 2) {
+
 				Thread.sleep(100);  // Esperar 100 ms
 				retries++;
 			}

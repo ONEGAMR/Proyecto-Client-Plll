@@ -23,6 +23,10 @@ public class SocketClient {
     	validate = 0;
     }
 
+    public static void setValidate(int validate) {
+        SocketClient.validate = validate;
+    }
+
     // Método estático para conectarse al servidor y comenzar a escuchar mensajes
     public static void connectToServer(String host) {
     	HOST = host;
@@ -62,7 +66,7 @@ public class SocketClient {
                     if(LogicSockect.separarPalabras(message).get(0).equals("user")) {
                         validate = Integer.parseInt(LogicSockect.separarPalabras(message).get(1));
                         //si todo esta bien llena los datos del usuario con los datos recibidos
-                        System.out.println(message);
+                        System.out.println(message+ " mensaje de llegada");
                         if(LogicSockect.separarPalabras(message).size() >  2){
 
                             LogicSockect.fullUser(message);
@@ -80,6 +84,18 @@ public class SocketClient {
                         System.out.println(message);
                         LogicSockect.setListMeals(message);
 
+                    }
+
+                    if(LogicSockect.separarPalabras(message).get(0).equals("listOrder")){
+
+                        System.out.println(message +"dentra a list order");
+                        LogicSockect.setListMealsOrder(message);
+                    }
+
+                    if(LogicSockect.separarPalabras(message).get(0).equals("listRecharge")){
+
+                        System.out.println(message +"dentra a list recharge");
+                        LogicSockect.setListRecharge(message);
                     }
                 }
             } catch (IOException e) {
