@@ -111,7 +111,7 @@ public class LogicSockect {
         return recharges;
     }
 
-    public synchronized static ArrayList<?> getListMeals(){
+    public synchronized static ArrayList<Meal> getListMeals(){
         return meals;
     }
 

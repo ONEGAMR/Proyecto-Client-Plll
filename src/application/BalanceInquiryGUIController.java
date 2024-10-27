@@ -56,7 +56,7 @@ public class BalanceInquiryGUIController {
                 List<Recharge> recharges = (List<Recharge>) LogicSockect.getListRecharges();
 
                 tvRecharges.setItems(FXCollections.observableArrayList(recharges));
-                lbEmptyTableMessage.setVisible(recharges.isEmpty());
+                //lbEmptyTableMessage.setVisible(recharges.isEmpty());
             } else {
                 notifyError("No tiene recargas registradas");
                 tvRecharges.setItems(FXCollections.observableArrayList());
@@ -85,7 +85,7 @@ public class BalanceInquiryGUIController {
     // Maneja la acción del botón de volver
     @FXML
     public void handleReturnAction() {
-        Logic.closeWindows(btAddBalance,"/presentation/MainGUI.fxml");
+        Logic.closeWindows(btReturn,"/presentation/MainGUI.fxml");
     }
 
     // Maneja la acción del botón de agregar saldo

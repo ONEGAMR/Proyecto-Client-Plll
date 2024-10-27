@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import application.Logic;
 import application.ServiceViewGUIController;
 import javafx.application.Platform;
 
@@ -96,6 +97,21 @@ public class SocketClient {
 
                         System.out.println(message +"dentra a list recharge");
                         LogicSockect.setListRecharge(message);
+                    }
+
+                    //se recibe la recargar
+                    if(LogicSockect.separarPalabras(message).get(0).equals("newBalance")){
+
+
+                        Logic.user.setDineroDisponible(Double.parseDouble(message.split(",")[1]));
+                        ServiceViewGUIController.getInstance().setBalance(Double.parseDouble(message.split(",")[1]));
+                    }
+
+                    //se recibe la recargar
+                    if(LogicSockect.separarPalabras(message).get(0).equals("notifyStatus")){
+
+                        System.out.println("Pedido" + message.split(",")[1]);
+
                     }
                 }
             } catch (IOException e) {
