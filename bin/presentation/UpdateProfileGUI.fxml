@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="591.0" prefWidth="598.0" styleClass="root" stylesheets="@application.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.UpdateProfileController">
+
+	<VBox prefHeight="675.0" prefWidth="598.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+
+		<!-- Header -->
+		<VBox styleClass="header">
+			<Label styleClass="label-Title" text="Editar Estudiante">
+            <padding>
+               <Insets top="10.0" />
+            </padding>
+            <VBox.margin>
+               <Insets left="12.0" />
+            </VBox.margin></Label>
+			<Label fx:id="lb_ErrorMessage" style="-fx-text-fill: white;" styleClass="login-subtitle" text="Actualiza la información del estudiante" textFill="WHITE">
+            <padding>
+               <Insets left="12.0" />
+            </padding></Label>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+		</VBox>
+
+		<!-- Scrollable Content -->
+		<ScrollPane fitToWidth="true" styleClass="scroll-pane" VBox.vgrow="ALWAYS">
+			<VBox styleClass="profile-container">
+				<!-- Formulario -->
+				<VBox spacing="16">
+					<!-- Carnet -->
+					<VBox spacing="8">
+						<Label styleClass="field-label" text="Carnet" />
+						<TextField fx:id="tfStudentID" disable="true" promptText="Número de carnet" styleClass="input-field" />
+					</VBox>
+
+					<!-- Nombre -->
+					<VBox spacing="8">
+						<Label styleClass="field-label" text="Nombre Completo" />
+						<TextField fx:id="tfName" promptText="Ingrese nombre completo" styleClass="input-field" />
+					</VBox>
+
+					<!-- Correo -->
+					<VBox spacing="8">
+						<Label styleClass="field-label" text="Correo Electrónico" />
+						<TextField fx:id="tfEmail" promptText="ejemplo@estudiantes.una.ac.cr" styleClass="input-field" />
+					</VBox>
+
+					<!-- Teléfono -->
+					<VBox spacing="8">
+						<Label styleClass="field-label" text="Teléfono" />
+						<TextField fx:id="tfPhone" promptText="8-10 dígitos" styleClass="input-field" />
+					</VBox>
+
+					<!-- Estado Activo -->
+					<VBox spacing="8">
+						<Label styleClass="field-label" text="Estado de la Cuenta" />
+						<CheckBox fx:id="cbIsActive" selected="true" styleClass="custom-checkbox" text="Cuenta Activa" />
+					</VBox>
+
+					<!-- Saldo -->
+					<VBox spacing="8">
+						<Label styleClass="field-label" text="Saldo Disponible" />
+						<TextField fx:id="tfAvailableMoney" promptText="Monto entre ₡5000 - ₡15000" styleClass="input-field" />
+					</VBox>
+
+					<!-- Contraseña -->
+					<VBox spacing="8">
+						<Label styleClass="field-label" text="Contraseña" />
+						<TextField fx:id="tfPassword" promptText="Ingrese nueva contraseña" styleClass="input-field" />
+					</VBox>
+
+					<!-- Foto -->
+					<VBox spacing="8">
+						<Label styleClass="field-label" text="Fotografía" />
+						<HBox spacing="8">
+							<TextField fx:id="tfRoutePhoto" promptText="Ruta de la imagen" styleClass="input-field" HBox.hgrow="ALWAYS" />
+							<Button fx:id="btnSelectPhoto" maxHeight="1.7976931348623157E308" onAction="#handleSelectPhoto" prefWidth="200.0" styleClass="button-white" text="Seleccionar" />
+						</HBox>
+					</VBox>
+				</VBox>
+			</VBox>
+		</ScrollPane>
+
+		<!-- Footer -->
+		<VBox prefWidth="598.0" styleClass="order-summary-footer">
+			<HBox alignment="CENTER_RIGHT" spacing="8">
+				<Button fx:id="btReturn" onAction="#handleReturnAction" prefWidth="150.0" styleClass="button-white" text="Cancelar" />
+				<Button fx:id="btEdit" onAction="#handleEditAction" prefWidth="150.0" styleClass="button-red" text="Guardar Cambios" />
+            <VBox.margin>
+               <Insets right="16.0" />
+            </VBox.margin>
+			</HBox>
+		</VBox>
+	</VBox>
+</AnchorPane>

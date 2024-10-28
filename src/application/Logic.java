@@ -21,21 +21,6 @@ import java.util.ArrayList;
 public class Logic {
 
 	public static User user;
-
-	public static void closeWindows(Button button, String window) {
-	    FXMLLoader loader = new FXMLLoader(Logic.class.getResource(window));
-	    try {
-	        Parent root = loader.load();
-	        Scene scene = new Scene(root);
-	        Stage stage = new Stage();
-	        stage.setScene(scene);
-	        stage.show();
-	        Stage temp = (Stage) button.getScene().getWindow();
-	        temp.close();
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-	}
 	
 	public static void notifyAction(String message, Label noti, Color color) {
 		noti.setText(message);
@@ -60,6 +45,7 @@ public class Logic {
 		return result.equals(buttonTypeYes);
 	}
 
+	//confirma una solicitud
 	public static void sleepTrhead(){
 		// Esperar hasta que 'validate' se actualice
 		while(SocketClient.validate == 0) {
@@ -71,6 +57,16 @@ public class Logic {
 			}
 		}
 	}
+
+	// Confirma una solicitud simplemente esperando un segundo
+	public static void sleepThread() {
+		try {
+			Thread.sleep(100);  // espera 1 segundo (1000 milisegundos)
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	//valida que este la confirmacion o se le da mas tiempo
 	public static void sleepTConfirm(){
 		int retries = 0;
 		try {
@@ -84,6 +80,7 @@ public class Logic {
 		}
 	}
 
+	//valida que la lista tenga elementos
 	public static void sleepTList(String typeList){
 		int retries = 0;
 		ArrayList<?> list = new ArrayList<>();

@@ -1,7 +1,7 @@
 package data;
 
 import application.Logic;
-import application.ServiceViewGUIController;
+import application.ServiceRequestController;
 import domain.Meal;
 import domain.Recharge;
 import domain.User;
@@ -25,10 +25,10 @@ public class LogicSockect {
         return new ArrayList<>(Arrays.asList(palabrasArray));
     }
 
-    private static ServiceViewGUIController serviceController;
+    private static ServiceRequestController serviceController;
     private static int expectedMealCount = 0;
 
-    public static void setServiceController(ServiceViewGUIController controller) {
+    public static void setServiceController(ServiceRequestController controller) {
         serviceController = controller;
     }
 
@@ -90,6 +90,11 @@ public class LogicSockect {
             user = "El perfil no pertenece a un estudiante";
         }
 
+        if(Logic.user != null && !Logic.user.isEstaActivo()){
+
+            user = "El perfil no esta inactivo";
+        }
+
         return user;
     }
 
@@ -111,7 +116,7 @@ public class LogicSockect {
         return recharges;
     }
 
-    public synchronized static ArrayList<?> getListMeals(){
+    public synchronized static ArrayList<Meal> getListMeals(){
         return meals;
     }
 

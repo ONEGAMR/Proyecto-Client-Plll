@@ -1,0 +1,61 @@
+.notification {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 10px;
+    -fx-padding: 8px 16px;
+    -fx-spacing: 8px;
+    -fx-alignment: center-left;
+    -fx-min-width: 340px;
+}
+
+.content-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+    -fx-background-radius: 4px;
+}
+
+.notification-icon {
+    -fx-stroke: #363636;
+    -fx-fill: #363636;
+    -fx-stroke-width: 0.5;
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
+}
+
+.notification-title {
+    -fx-text-fill: #363636;
+    -fx-font-family: "Segoe UI", System;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+}
+
+.notification-description {
+    -fx-text-fill: #6B7280;
+    -fx-font-family: "Segoe UI", System;
+    -fx-font-size: 12px;
+    -fx-wrap-text: true;
+}
+
+.notification-close {
+    -fx-background-color: transparent;
+    -fx-padding: 2px;
+    -fx-cursor: hand;
+    -fx-background-radius: 4px;
+}
+
+.notification-close:hover {
+    -fx-background-color: rgba(0, 0, 0, 0.05);
+}
+
+.notification-close-icon {
+    -fx-stroke: #6B7280;
+    -fx-stroke-width: 2;
+    -fx-fill: transparent;
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+}
+
+.notification-close:hover .notification-close-icon {
+    -fx-stroke: #4B5563;
+}

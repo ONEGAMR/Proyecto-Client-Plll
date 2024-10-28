@@ -2,7 +2,6 @@ package application;
 
 import data.LogicSockect;
 import data.SocketClient;
-import domain.Meal;
 import domain.Recharge;
 import domain.Student;
 import javafx.application.Platform;
@@ -12,14 +11,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class BalanceInquiryGUIController {
+public class BalanceController {
 
     @FXML private TableView<Recharge> tvRecharges;
     @FXML private TableColumn<Recharge, String> tcStudentID;
@@ -43,20 +38,24 @@ public class BalanceInquiryGUIController {
 
     public void setTvRecharges(){
 
+        //se limpia y se envia mensaje solicitando una lista con elementos
         LogicSockect.recharges.clear();
         SocketClient.sendMessage("listRecharge,"+ Logic.user.getCarnet());
 
+        //Espera a que la lista este cargada
         Logic.sleepTList("recharges");
 
+        //para sincronizar la tabla con el hilo
         Platform.runLater(() -> {
 
+            //llena la tabla si esta tiene elementos
             if (LogicSockect.getListRecharges() != null && !LogicSockect.getListRecharges().isEmpty()) {
 
                 tvRecharges.getItems().clear();
                 List<Recharge> recharges = (List<Recharge>) LogicSockect.getListRecharges();
 
                 tvRecharges.setItems(FXCollections.observableArrayList(recharges));
-                lbEmptyTableMessage.setVisible(recharges.isEmpty());
+                //lbEmptyTableMessage.setVisible(recharges.isEmpty());
             } else {
                 notifyError("No tiene recargas registradas");
                 tvRecharges.setItems(FXCollections.observableArrayList());
@@ -65,6 +64,7 @@ public class BalanceInquiryGUIController {
         });
     }
 
+    //inicia las columnas
     private void setupTableColumns() {
         tcRechargeDate.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDateTb()));
         tcAmount.setCellValueFactory(new PropertyValueFactory<>("monto"));
@@ -85,7 +85,7 @@ public class BalanceInquiryGUIController {
     // Maneja la acción del botón de volver
     @FXML
     public void handleReturnAction() {
-        Logic.closeWindows(btAddBalance,"/presentation/MainGUI.fxml");
+        SocketClient.closeWindows(btReturn,"/presentation/MainGUI.fxml");
     }
 
     // Maneja la acción del botón de agregar saldo

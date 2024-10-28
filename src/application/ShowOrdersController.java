@@ -8,10 +8,11 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ShowOrdersController {
 
@@ -19,7 +20,16 @@ public class ShowOrdersController {
     private ComboBox<String> cmStatus;
 
     @FXML
-    private ListView<String> listOrders;
+    private TableView<Meal> tableOrders;
+
+    @FXML
+    private TableColumn<Meal, String> nameColumn;
+
+    @FXML
+    private TableColumn<Meal, Integer> quantityColumn;
+
+    @FXML
+    private TableColumn<Meal, Integer> totalColumn;
 
     @FXML
     private Button btReturn;
@@ -31,86 +41,73 @@ public class ShowOrdersController {
 
     @FXML
     private void initialize() {
-        // Inicializar el ComboBox con algunas opciones de estado
-        cmStatus.getItems().addAll("Pendiente", "Preparando", "Entregado");
+        // Inicializar columnas de la tabla
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        totalColumn.setCellValueFactory(new PropertyValueFactory<>("totalOrder"));
 
-        // Añadir un listener para manejar cambios en la selección del ComboBox
+        // Inicializar el ComboBox con opciones de estado
+        cmStatus.getItems().addAll("Pendiente", "Preparando", "Entregado", "Listo");
+
+        // Añadir listener para cambios en la selección del ComboBox
         cmStatus.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
             filterOrders(newValue);
         });
-        
+
         // Manejar clics en los botones
         btReturn.setOnAction(event -> handleReturn());
         btAll.setOnAction(event -> showAllOrders());
-
 
         // Cargar todos los pedidos por defecto
         LogicSockect.meals.clear();
         fillListOrder("Todos");
     }
 
-    public void fillListOrder(String status){
-
+    public void fillListOrder(String status) {
         setStatusOrder(status);
-
         Logic.sleepTList("meals");
 
         Platform.runLater(() -> {
-            listOrders.getItems().clear();
             List<Meal> meals = (List<Meal>) LogicSockect.getListMeals();
 
             if (meals != null && !meals.isEmpty()) {
-                // Convertir Meal a String solo si hay elementos en la lista
-                List<String> mealDescriptions = meals.stream()
-                        .map(meal -> meal.toStringPedidoForList())
-                        .collect(Collectors.toList());
-
-                listOrders.setItems(FXCollections.observableArrayList(mealDescriptions));
+                tableOrders.setItems(FXCollections.observableArrayList(meals));
             } else {
-                // Mostrar el mensaje "No hay pedidos" si la lista es nula o está vacía
-                listOrders.setItems(FXCollections.observableArrayList("No hay pedidos"));
+                tableOrders.setItems(FXCollections.observableArrayList());
             }
-            listOrders.setVisible(true); // Asegurar que la lista sea visible
         });
-
     }
 
-    public void setStatusOrder(String status){
-
-        SocketClient.sendMessage("listOrder,"+Logic.user.getCarnet()+","+ status);
-        System.out.println("listOrder,"+Logic.user.getCarnet()+","+ status+ " Envio de orders");
+    public void setStatusOrder(String status) {
+        SocketClient.sendMessage("listOrder," + Logic.user.getCarnet() + "," + status);
+        System.out.println("listOrder," + Logic.user.getCarnet() + "," + status + " Envio de orders");
     }
 
     private void handleReturn() {
-
-         Logic.closeWindows(btReturn,"/presentation/MainGUI.fxml");
-
+        SocketClient.closeWindows(btReturn, "/presentation/MainGUI.fxml");
     }
 
     private void showAllOrders() {
-
+        LogicSockect.meals.clear();
         fillListOrder("Todos");
     }
 
     private void filterOrders(String status) {
-        // Implementar la lógica para filtrar pedidos según el estado
-        listOrders.getItems().clear();
-
         // Verificar si el nuevo menú es diferente al anterior
         if (!status.equals(beforeList)) {
             System.out.println("Nuevo menú seleccionado: " + status);
             LogicSockect.meals.clear();
-            beforeList = status; // Actualizar el menú anterior
+            beforeList = status;
         }
 
-        if(status.equals("Pendiente")){
-
+        //se llena la table dependiendo del filtro
+        if (status.equals("Pendiente")) {
             fillListOrder("Pendiente");
-        }else if(status.equals("Preparando")){
 
+        } else if (status.equals("Preparando")) {
             fillListOrder("Preparando");
-        }else if(status.equals("Entregado")){
 
+        } else if (status.equals("Entregado")) {
             fillListOrder("Entregado");
         }
     }
