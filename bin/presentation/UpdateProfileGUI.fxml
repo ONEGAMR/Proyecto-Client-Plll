@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="591.0" prefWidth="598.0" styleClass="root" stylesheets="@application.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.UpdateStudentGUIController">
+<AnchorPane prefHeight="591.0" prefWidth="598.0" styleClass="root" stylesheets="@application.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.UpdateProfileController">
 
 	<VBox prefHeight="675.0" prefWidth="598.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 
@@ -19,8 +19,14 @@
 			<Label styleClass="label-Title" text="Editar Estudiante">
             <padding>
                <Insets top="10.0" />
+            </padding>
+            <VBox.margin>
+               <Insets left="12.0" />
+            </VBox.margin></Label>
+			<Label fx:id="lb_ErrorMessage" style="-fx-text-fill: white;" styleClass="login-subtitle" text="Actualiza la información del estudiante">
+            <padding>
+               <Insets left="12.0" />
             </padding></Label>
-			<Label fx:id="lb_ErrorMessage" style="-fx-text-fill: white;" styleClass="login-subtitle" text="Actualiza la información del estudiante" />
          <VBox.margin>
             <Insets />
          </VBox.margin>
@@ -58,7 +64,7 @@
 					<!-- Estado Activo -->
 					<VBox spacing="8">
 						<Label styleClass="field-label" text="Estado de la Cuenta" />
-						<CheckBox fx:id="cbIsActive" selected="true" styleClass="meal-radio" text="Cuenta Activa" />
+						<CheckBox fx:id="cbIsActive" selected="true" styleClass="custom-checkbox" text="Cuenta Activa" />
 					</VBox>
 
 					<!-- Saldo -->
@@ -78,7 +84,7 @@
 						<Label styleClass="field-label" text="Fotografía" />
 						<HBox spacing="8">
 							<TextField fx:id="tfRoutePhoto" promptText="Ruta de la imagen" styleClass="input-field" HBox.hgrow="ALWAYS" />
-							<Button fx:id="btnSelectPhoto" onAction="#handleSelectPhoto" styleClass="button-white" text="Seleccionar" />
+							<Button fx:id="btnSelectPhoto" maxHeight="1.7976931348623157E308" onAction="#handleSelectPhoto" prefWidth="200.0" styleClass="button-white" text="Seleccionar" />
 						</HBox>
 					</VBox>
 				</VBox>
@@ -90,6 +96,9 @@
 			<HBox alignment="CENTER_RIGHT" spacing="8">
 				<Button fx:id="btReturn" onAction="#handleReturnAction" prefWidth="150.0" styleClass="button-white" text="Cancelar" />
 				<Button fx:id="btEdit" onAction="#handleEditAction" prefWidth="150.0" styleClass="button-red" text="Guardar Cambios" />
+            <VBox.margin>
+               <Insets right="16.0" />
+            </VBox.margin>
 			</HBox>
 		</VBox>
 	</VBox>

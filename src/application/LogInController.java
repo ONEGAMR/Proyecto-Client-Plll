@@ -10,9 +10,7 @@ import data.SocketClient;
 import javafx.event.ActionEvent;
 import javafx.scene.paint.Color;
 
-import java.awt.*;
-
-public class GUIController {
+public class LogInController {
 	@FXML
 	private TextField tfIp;
 	@FXML
@@ -46,12 +44,11 @@ public class GUIController {
 			String validate = LogicSockect.validateUser();
 
 			if (validate != null) {
-
 				Logic.notifyAction(LogicSockect.validateUser(), message, Color.RED);
 			}else{
 
 				System.out.println(Logic.user.toString() +" llega y llena en GUIcontroller");
-				Logic.closeWindows(btEnter,"/presentation/MainGUI.fxml");
+				SocketClient.closeWindows(btEnter,"/presentation/MainGUI.fxml");
 			}
 		}else{
 			Logic.notifyAction("No pueden haber campos vacios", message, Color.RED);

@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.SVGPath?>
 
-<AnchorPane style="-fx-background-color: white;" styleClass="root" stylesheets="@application.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.GUIController">
+<AnchorPane style="-fx-background-color: white;" styleClass="root" stylesheets="@application.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.LogInController">
    <VBox alignment="CENTER" prefWidth="440" spacing="32" styleClass="login-container" AnchorPane.topAnchor="20.0">
       <!-- Header with Logo and Title -->
       <VBox alignment="CENTER" styleClass="login-header">

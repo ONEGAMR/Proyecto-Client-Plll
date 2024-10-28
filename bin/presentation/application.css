@@ -1,19 +1,14 @@
-/* Root Styles naranja FF7F50 ROJO DA291C GREEN:008B76 GRENDIFERENT:  */
 .root {
-    -color-primary: #DA291C;
-    -color-primary-dark: derive(-color-primary, -10%);  /* 10% más oscuro que el color primario */
-    -color-primary-darker: derive(-color-primary, -20%); /* 20% más oscuro */
-    -color-primary-light: derive(-color-primary, 10%);  /* 10% más claro */
-    -color-primary-lighter: derive(-color-primary, 135%); /* 20% más claro */
-
-    /* Para el color de error, podrías mantenerlo independiente o derivarlo también */
+    -color-primary: #E83033;
+    -color-primary-dark: derive(-color-primary, -10%);
+    -color-primary-darker: derive(-color-primary, -20%);
+    -color-primary-light: derive(-color-primary, 10%);
+    -color-primary-lighter: derive(-color-primary, 120%);
     -color-error: #DA291C;
-
     -fx-background-color: #f4f4f5;
     -fx-font-family: 'Inter';
 }
 
-/* ScrollPane Customization */
 .scroll-pane {
     -fx-background-color: transparent;
     -fx-background: transparent;
@@ -24,7 +19,6 @@
     -fx-background-color: transparent;
 }
 
-/* Scrollbar Customization */
 .scroll-pane .scroll-bar:vertical {
     -fx-background-color: transparent;
     -fx-pref-width: 12;
@@ -39,14 +33,12 @@
 .scroll-pane .scroll-bar:vertical .thumb {
     -fx-background-color: white;
     -fx-background-radius: 6;
-
 }
 
 .scroll-pane .scroll-bar:vertical .thumb:hover {
     -fx-background-color: #a0a0a0;
 }
 
-/* Header Styling */
 .header {
     -fx-background-color: -color-primary;
     -fx-padding: 16px 24px;
@@ -63,7 +55,6 @@
     -fx-fill: white;
 }
 
-/* User Profile Section */
 .user-name {
     -fx-font-size: 14px;
     -fx-font-weight: 700;
@@ -82,15 +73,13 @@
     -fx-fill: transparent;
 }
 
-/* Profile Section */
 .profile-container {
     -fx-background-color: white;
     -fx-border-color: #f0f0f0;
     -fx-border-width: 0 0 1 0;
-    -fx-padding: 24px;
+    -fx-padding: 24 32px;
 }
 
-/* Selection Section */
 .selection-row {
     -fx-alignment: CENTER_LEFT;
 }
@@ -101,7 +90,6 @@
     -fx-font-weight: 600;
 }
 
-/* Radio Button Styling */
 .meal-radio {
     -fx-font-size: 14px;
     -fx-text-fill: #52525b;
@@ -134,7 +122,6 @@
     -fx-background-color: transparent;
 }
 
-/* ComboBox Styling */
 .comboBox-normal {
     -fx-background-color: white;
     -fx-border-color: #e0e0e0;
@@ -156,7 +143,6 @@
     -fx-background-color: #666666;
 }
 
-/* Meal Cards Grid */
 .table-container {
     -fx-background-color: transparent;
     -fx-padding: 8 16 8 24;
@@ -168,7 +154,6 @@
     -fx-vgap: 12px;
     -fx-padding: 16px 0;
 }
-
 
 .meal-card {
     -fx-background-color: white;
@@ -202,7 +187,6 @@
     -fx-alignment: CENTER_RIGHT;
 }
 
-/* Order Items Styling */
 .order-item {
     -fx-background-color: transparent;
     -fx-spacing: 12px;
@@ -218,7 +202,6 @@
     -fx-font-size: 13px;
 }
 
-/* Quantity Control Styling */
 .order-item Button {
     -fx-background-color: white;
     -fx-border-color: #e0e0e0;
@@ -241,7 +224,6 @@
     -fx-alignment: center;
 }
 
-/* Order Summary Sidebar */
 .order-summary-sidebar {
     -fx-background-color: white;
     -fx-border-color: #f0f0f0;
@@ -265,7 +247,8 @@
     -fx-spacing: 8px;
 }
 
-.label-subtotal, .label-tax {
+.label-subtotal,
+.label-tax {
     -fx-font-size: 13px;
     -fx-text-fill: #666666;
 }
@@ -276,13 +259,12 @@
     -fx-text-fill: #2c2c2c;
 }
 
-/* Buttons */
 .button-red {
     -fx-background-color: -color-primary;
     -fx-text-fill: white;
     -fx-font-weight: 700;
     -fx-font-size: 12px;
-    -fx-padding: 14px;
+    -fx-padding: 10px;
     -fx-background-radius: 6px;
 }
 
@@ -291,12 +273,12 @@
 }
 
 .button-white {
--fx-font-size: 12px;
+    -fx-font-size: 12px;
     -fx-background-color: white;
     -fx-border-color: #e0e0e0;
     -fx-text-fill: #2c2c2c;
     -fx-font-weight: 600;
-    -fx-padding: 14px;
+    -fx-padding: 10px;
     -fx-background-radius: 6px;
     -fx-border-radius: 6px;
 }
@@ -306,7 +288,6 @@
     -fx-text-fill: -color-primary;
 }
 
-/* Login Container */
 .login-container {
     -fx-background-color: white;
     -fx-background-radius: 12px;
@@ -315,7 +296,6 @@
     -fx-alignment: center;
 }
 
-/* Header Styling */
 .login-header {
     -fx-padding: 0 0 16px 0;
 }
@@ -347,7 +327,6 @@
     -fx-font-weight: 500;
 }
 
-/* Form Container */
 .form-container {
     -fx-padding: 8px 0;
     -fx-max-width: 360px;
@@ -382,7 +361,6 @@
     -fx-border-width: 2px;
 }
 
-/* Error Message */
 .error-message {
     -fx-text-fill: -color-error;
     -fx-font-size: 14px;
@@ -391,7 +369,6 @@
     -fx-max-width: 360px;
 }
 
-/* Login Button */
 .login-button {
     -fx-background-color: -color-primary;
     -fx-text-fill: white;
@@ -421,13 +398,10 @@
 
 .separator {
     -fx-border-color: #f0f0f0;
-    -fx-border-width: 1 0 0 0; /* Borde solo en la parte superior */
+    -fx-border-width: 1 0 0 0;
 }
 
-/* Main GUI Styles */
-.main-container {
-
-}
+.main-container {}
 
 .header-container {
     -fx-background-color: -color-primary;
@@ -474,7 +448,7 @@
     -fx-border-radius: 8;
     -fx-min-width: 180;
     -fx-max-width: Infinity;
-    -fx-min-height: 60;
+    -fx-min-height: 80;
 }
 
 .action-button:hover {
@@ -515,36 +489,42 @@
 .modern-table .column-header {
     -fx-background-color: transparent;
     -fx-border-color: #dee2e6;
-    -fx-border-width: 0 0 0 0; /* Solo borde inferior */
+    -fx-border-width: 0 0 0 0;
     -fx-padding: 0;
-    -fx-font-size: 13px;       /* Aumentado de 13px */
+    -fx-font-size: 13px;
     -fx-font-weight: bold;
     -fx-text-fill: #344767;
     -fx-alignment: CENTER;
-    -fx-min-height: 20px;      /* Altura mínima más grande para headers */
+    -fx-min-height: 35px;
+    -fx-content-display: CENTER;
 }
 
 .modern-table .table-row-cell {
     -fx-background-color: white;
-    -fx-border-color: transparent transparent #dee2e6 transparent; /* Solo borde inferior */
-    -fx-border-width: 0 0 0.5 0; /* Solo borde inferior */
-    -fx-padding: 0;            /* Reducido de 5 0 */
-    -fx-min-height: 15px;      /* Altura reducida para las filas */
-}
-
-.modern-table .table-row-cell:hover {
-    -fx-background-color: #f8f9fa;
+    -fx-border-color: transparent transparent #dee2e6 transparent;
+    -fx-border-width: 0 0 0.5 0;
+    -fx-padding: 0;
+    -fx-min-height: 35px;
+    -fx-alignment: CENTER;
 }
 
 .modern-table .table-cell {
     -fx-alignment: CENTER;
-    -fx-padding: 8 15;         /* Reducido de 12 15 */
+    -fx-padding: 0;
     -fx-text-fill: #344767;
     -fx-font-size: 13px;
-    -fx-border-width: 0;       /* Eliminamos bordes duplicados */
+    -fx-border-width: 0;
+    -fx-min-height: 35px;
+    -fx-content-display: CENTER;
+    -fx-text-alignment: CENTER;
+    -fx-alignment: CENTER;
+    -fx-valignment: CENTER;
 }
 
-/* Estilo para el scroll */
+.table-cell > .text {
+    -fx-translate-y: 0;
+}
+
 .modern-table .scroll-bar:vertical,
 .modern-table .scroll-bar:horizontal {
     -fx-background-color: transparent;
@@ -561,17 +541,159 @@
     -fx-background-color: transparent;
 }
 
-/* Estilo para el header de la ventana */
 .header-section {
     -fx-background-color: #344767;
-    -fx-padding: 25;           /* Aumentado de 20 */
+    -fx-padding: 25;
     -fx-spacing: 10;
-    -fx-alignment: CENTER;     /* Centra el contenido del header */
+    -fx-alignment: CENTER;
 }
 
 .header-label {
-    -fx-font-size: 18;         /* Aumentado de 16 */
+    -fx-font-size: 18;
     -fx-font-weight: bold;
     -fx-text-fill: white;
-    -fx-text-alignment: CENTER; /* Centra el título */
+    -fx-text-alignment: CENTER;
+}
+
+.comboBox-normal {
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 8px;
+    -fx-font-size: 14px;
+}
+
+.comboBox-normal:hover {
+    -fx-border-color: -color-primary;
+}
+
+.comboBox-normal .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.comboBox-normal .arrow {
+    -fx-background-color: #666666;
+}
+
+.comboBox-normal .list-cell {
+    -fx-background-color: white;
+    -fx-padding: 8px 12px;
+    -fx-text-fill: #52525b;
+}
+
+.comboBox-normal .list-cell:hover {
+    -fx-background-color: #f4f4f5;
+}
+
+.comboBox-normal .list-view {
+    -fx-background-color: white;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-border-color: #e0e0e0;
+}
+
+.orders-list {
+    -fx-background-color: white;
+    -fx-background-insets: 0;
+    -fx-padding: 0 15;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+}
+
+.orders-list .list-cell {
+    -fx-background-color: white;
+    -fx-padding: 0;
+    -fx-min-height: 40px;
+    -fx-pref-height: 40px;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+    -fx-border-color: transparent transparent #f0f0f0 transparent;
+}
+
+.orders-list .list-cell:hover {
+    -fx-background-color: #f8f9fa;
+}
+
+.orders-list .list-cell:selected {
+    -fx-background-color: #f0f4ff;
+    -fx-text-fill: -color-primary;
+}
+
+.orders-list .list-cell:empty {
+    -fx-background-color: white;
+    -fx-border-color: transparent;
+}
+
+.orders-list .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 10;
+    -fx-padding: 0 2;
+}
+
+.orders-list .scroll-bar:vertical .track {
+    -fx-background-color: #f0f0f0;
+    -fx-background-radius: 4;
+}
+
+.orders-list .scroll-bar:vertical .thumb {
+    -fx-background-color: #d0d0d0;
+    -fx-background-radius: 4;
+}
+
+.orders-list .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #a0a0a0;
+}
+
+.orders-list .placeholder {
+    -fx-text-fill: #666666;
+    -fx-font-size: 14px;
+}
+
+.custom-checkbox {
+    -fx-padding: 4px;
+    -fx-font-size: 14px;
+    -fx-text-fill: #52525b;
+    -fx-font-weight: 600;
+}
+
+.custom-checkbox .box {
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 4px;
+    -fx-border-width: 2px;
+    -fx-background-radius: 4px;
+    -fx-pref-width: 14px;
+    -fx-pref-height: 14px;
+}
+
+.custom-checkbox:hover .box {
+    -fx-border-color: -color-primary;
+}
+
+.custom-checkbox:focused .box {
+    -fx-border-color: -color-primary;
+}
+
+.custom-checkbox:selected .box {
+    -fx-background-color: -color-primary;
+    -fx-border-color: -color-primary;
+}
+
+.custom-checkbox:selected .mark {
+    -fx-background-color: transparent;
+}
+
+.custom-checkbox:disabled {
+    -fx-opacity: 0.6;
+}
+
+.custom-checkbox:indeterminate .box {
+    -fx-background-color: -color-primary;
+    -fx-border-color: -color-primary;
+}
+
+.custom-checkbox:indeterminate .mark {
+    -fx-background-color: transparent;
 }

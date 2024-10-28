@@ -2,7 +2,6 @@ package application;
 
 import data.LogicSockect;
 import data.SocketClient;
-import domain.Meal;
 import domain.Recharge;
 import domain.Student;
 import javafx.application.Platform;
@@ -12,14 +11,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class BalanceInquiryGUIController {
+public class BalanceController {
 
     @FXML private TableView<Recharge> tvRecharges;
     @FXML private TableColumn<Recharge, String> tcStudentID;
@@ -85,7 +80,7 @@ public class BalanceInquiryGUIController {
     // Maneja la acción del botón de volver
     @FXML
     public void handleReturnAction() {
-        Logic.closeWindows(btReturn,"/presentation/MainGUI.fxml");
+        SocketClient.closeWindows(btReturn,"/presentation/MainGUI.fxml");
     }
 
     // Maneja la acción del botón de agregar saldo

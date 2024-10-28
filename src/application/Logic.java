@@ -21,21 +21,6 @@ import java.util.ArrayList;
 public class Logic {
 
 	public static User user;
-
-	public static void closeWindows(Button button, String window) {
-	    FXMLLoader loader = new FXMLLoader(Logic.class.getResource(window));
-	    try {
-	        Parent root = loader.load();
-	        Scene scene = new Scene(root);
-	        Stage stage = new Stage();
-	        stage.setScene(scene);
-	        stage.show();
-	        Stage temp = (Stage) button.getScene().getWindow();
-	        temp.close();
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-	}
 	
 	public static void notifyAction(String message, Label noti, Color color) {
 		noti.setText(message);

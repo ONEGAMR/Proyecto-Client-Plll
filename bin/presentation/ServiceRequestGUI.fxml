@@ -15,7 +15,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.SVGPath?>
 
-<AnchorPane prefHeight="680.0" prefWidth="1100.0" styleClass="anchorPane" stylesheets="@application.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ServiceViewGUIController">
+<AnchorPane prefHeight="680.0" prefWidth="1100.0" styleClass="anchorPane" stylesheets="@application.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ServiceRequestController">
 	<VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 		<!-- Header Section -->
 		<HBox alignment="CENTER" maxHeight="90.0" minHeight="80.0" styleClass="header">

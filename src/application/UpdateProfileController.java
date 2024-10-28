@@ -12,7 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import java.io.File;
 
-public class UpdateStudentGUIController {
+public class UpdateProfileController {
 
     @FXML private TextField tfStudentID;
     @FXML private TextField tfName;
@@ -58,7 +58,7 @@ public class UpdateStudentGUIController {
 
     @FXML
     public void handleReturnAction(ActionEvent event) {
-        Logic.closeWindows(btReturn,"/presentation/MainGUI.fxml");
+        SocketClient.closeWindows(btReturn,"/presentation/MainGUI.fxml");
     }
 
     @FXML
@@ -98,7 +98,7 @@ public class UpdateStudentGUIController {
 
             if (LogicSockect.confirm()) {
                 Logic.notifyAction("Estudiante actualizado con éxito", lbErrorMessage, Color.GREEN);
-                Logic.closeWindows(btReturn,"/presentation/MainGUI.fxml");
+                SocketClient.closeWindows(btReturn,"/presentation/MainGUI.fxml");
             } else {
                 Logic.notifyAction("Error al actualizar el estudiante",lbErrorMessage, Color.RED);
             }

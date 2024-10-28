@@ -1,6 +1,5 @@
 package application;
 
-import application.Logic;
 import domain.User;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -20,7 +19,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
 import data.LogicSockect;
 import data.SocketClient;
 import data.Utils;
@@ -31,9 +29,9 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-public class ServiceViewGUIController {
+public class ServiceRequestController {
 
-    private static ServiceViewGUIController instance;
+    private static ServiceRequestController instance;
 
     @FXML
     private ComboBox<String> cbReservationDay;
@@ -118,7 +116,7 @@ public class ServiceViewGUIController {
     }
 
     // Método para obtener la instancia del controlador
-    public static ServiceViewGUIController getInstance() {
+    public static ServiceRequestController getInstance() {
         return instance;
     }
 
@@ -665,6 +663,6 @@ public class ServiceViewGUIController {
     }
 
     public void handleReturnAction(ActionEvent actionEvent) {
-        Logic.closeWindows(btReturn,"/presentation/MainGUI.fxml");
+        SocketClient.closeWindows(btReturn,"/presentation/MainGUI.fxml");
     }
 }
