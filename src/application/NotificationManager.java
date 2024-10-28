@@ -23,8 +23,8 @@ public class NotificationManager {
             AnchorPane notification = loader.load();
             NotificationCardController controller = loader.getController();
 
-            AnchorPane.setTopAnchor(notification, 10.0);
-            AnchorPane.setRightAnchor(notification, 10.0);
+            AnchorPane.setTopAnchor(notification, 15.0);
+            AnchorPane.setRightAnchor(notification, 15.0);
 
             root.getChildren().add(notification);
             controller.setNotification(title);

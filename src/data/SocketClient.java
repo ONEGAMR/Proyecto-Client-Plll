@@ -54,8 +54,6 @@ public class SocketClient {
     }
 
 
-
-
     public static void reset() {
         validate = 0;
     }
@@ -64,10 +62,16 @@ public class SocketClient {
         SocketClient.validate = validate;
     }
 
+    public static boolean isConnected = false;
+
     // Método estático para conectarse al servidor y comenzar a escuchar mensajes
-    public static void connectToServer(String host) {
+    public static boolean connectToServer(String host) {
         HOST = host;
-        new Thread(() -> { initThread(); receiveMessages();}).start();
+        new Thread(() -> { initThread(); receiveMessages();
+        }).start();
+
+        Logic.sleepThread();
+        return isConnected;
     }
 
     // Método estático para enviar un mensaje al servidor
@@ -86,7 +90,7 @@ public class SocketClient {
             salida = new PrintWriter(socket.getOutputStream(), true);  // Preparar para enviar mensajes
 
             System.out.println("Conexión con el servidor establecida.");
-
+            isConnected = true;
         } catch (IOException e) {
             System.out.println("Error al conectar con el servidor: " + e.getMessage());
         }
@@ -94,76 +98,80 @@ public class SocketClient {
 
     public synchronized static void receiveMessages() {
 
-        while (true) {
-            try {
-                String message = entrada.readLine();
+        if(isConnected) {
+            while (true) {
+                try {
+                    String message = entrada.readLine();
 
-                if (message != null) {
-                    // Procesar el mensaje y actualizar la variable 'validate'
-                    if(LogicSockect.separarPalabras(message).get(0).equals("user")) {
-                        validate = Integer.parseInt(LogicSockect.separarPalabras(message).get(1));
-                        //si todo esta bien llena los datos del usuario con los datos recibidos
-                        System.out.println(message+ " mensaje de llegada");
-                        if(LogicSockect.separarPalabras(message).size() >  2){
+                    if (message != null) {
+                        // Procesar el mensaje y actualizar la variable 'validate'
+                        if (LogicSockect.separarPalabras(message).get(0).equals("user")) {
+                            validate = Integer.parseInt(LogicSockect.separarPalabras(message).get(1));
+                            //si todo esta bien llena los datos del usuario con los datos recibidos
+                            System.out.println(message + " mensaje de llegada");
+                            if (LogicSockect.separarPalabras(message).size() > 2) {
 
-                            LogicSockect.fullUser(message);
+                                LogicSockect.fullUser(message);
+                            }
+                        }
+
+                        //recibe la confirmacion de que se actualizo el usuario
+                        if (LogicSockect.separarPalabras(message).get(0).equals("us_confirm")) {
+                            System.out.println(message);
+                            LogicSockect.setUs_confirm(Boolean.parseBoolean(LogicSockect.separarPalabras(message).get(1)));
+                        }
+
+                        if (LogicSockect.separarPalabras(message).get(0).equals("listMeals")) {
+
+                            System.out.println(message);
+                            LogicSockect.setListMeals(message);
+
+                        }
+
+                        if (LogicSockect.separarPalabras(message).get(0).equals("listOrder")) {
+
+                            System.out.println(message + "dentra a list order");
+                            LogicSockect.setListMealsOrder(message);
+                        }
+
+                        if (LogicSockect.separarPalabras(message).get(0).equals("listRecharge")) {
+
+                            System.out.println(message + "dentra a list recharge");
+                            LogicSockect.setListRecharge(message);
+                        }
+
+                        //se recibe la recargar
+                        if (LogicSockect.separarPalabras(message).get(0).equals("newBalance")) {
+
+
+                            Logic.user.setDineroDisponible(Double.parseDouble(message.split(",")[1]));
+                            try {
+                                ServiceRequestController.getInstance().setBalance(Double.parseDouble(message.split(",")[1]));
+                            } catch (NullPointerException e) {
+                                System.out.println("La ventana no está abierta o el método getInstance() devolvió null.");
+                            } catch (NumberFormatException e) {
+                                System.out.println("El mensaje no contiene un número válido para el balance.");
+                            } catch (Exception e) {
+                                System.out.println("Ocurrió un error inesperado: " + e.getMessage());
+                            }
+
+                        }
+
+                        //Se recibe el cambio de estado de los pedidos
+                        if (LogicSockect.separarPalabras(message).get(0).equals("notifyStatus")) {
+
+                            System.out.println("Pedido" + message.split(",")[1]);
+
+                            // Mostrar la notificación en todas las ventanas activas
+                            NotificationManager.showNotificationInAllWindows(message.split(",")[1]);
+
                         }
                     }
 
-                    //recibe la confirmacion de que se actualizo el usuario
-                    if(LogicSockect.separarPalabras(message).get(0).equals("us_confirm")){
-                        System.out.println(message);
-                        LogicSockect.setUs_confirm(Boolean.parseBoolean(LogicSockect.separarPalabras(message).get(1)));
-                    }
-
-                    if(LogicSockect.separarPalabras(message).get(0).equals("listMeals")){
-
-                        System.out.println(message);
-                        LogicSockect.setListMeals(message);
-
-                    }
-
-                    if(LogicSockect.separarPalabras(message).get(0).equals("listOrder")){
-
-                        System.out.println(message +"dentra a list order");
-                        LogicSockect.setListMealsOrder(message);
-                    }
-
-                    if(LogicSockect.separarPalabras(message).get(0).equals("listRecharge")){
-
-                        System.out.println(message +"dentra a list recharge");
-                        LogicSockect.setListRecharge(message);
-                    }
-
-                    //se recibe la recargar
-                    if(LogicSockect.separarPalabras(message).get(0).equals("newBalance")){
-
-
-                        Logic.user.setDineroDisponible(Double.parseDouble(message.split(",")[1]));
-                        try {
-                            ServiceRequestController.getInstance().setBalance(Double.parseDouble(message.split(",")[1]));
-                        } catch (NullPointerException e) {
-                            System.out.println("La ventana no está abierta o el método getInstance() devolvió null.");
-                        } catch (NumberFormatException e) {
-                            System.out.println("El mensaje no contiene un número válido para el balance.");
-                        } catch (Exception e) {
-                            System.out.println("Ocurrió un error inesperado: " + e.getMessage());
-                        }
-
-                    }
-
-                    if(LogicSockect.separarPalabras(message).get(0).equals("notifyStatus")){
-
-                        System.out.println("Pedido" + message.split(",")[1]);
-
-                        // Mostrar la notificación en todas las ventanas activas
-                        NotificationManager.showNotificationInAllWindows(message.split(",")[1]);
-
-                    }
+                } catch (IOException e) {
+                    System.out.println("Error al recibir mensajes del servidor: " + e.getMessage());
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                System.out.println("Error al recibir mensajes del servidor: " + e.getMessage());
-                e.printStackTrace();
             }
         }
     }

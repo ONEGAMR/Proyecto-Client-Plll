@@ -38,13 +38,17 @@ public class BalanceController {
 
     public void setTvRecharges(){
 
+        //se limpia y se envia mensaje solicitando una lista con elementos
         LogicSockect.recharges.clear();
         SocketClient.sendMessage("listRecharge,"+ Logic.user.getCarnet());
 
+        //Espera a que la lista este cargada
         Logic.sleepTList("recharges");
 
+        //para sincronizar la tabla con el hilo
         Platform.runLater(() -> {
 
+            //llena la tabla si esta tiene elementos
             if (LogicSockect.getListRecharges() != null && !LogicSockect.getListRecharges().isEmpty()) {
 
                 tvRecharges.getItems().clear();
@@ -60,6 +64,7 @@ public class BalanceController {
         });
     }
 
+    //inicia las columnas
     private void setupTableColumns() {
         tcRechargeDate.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDateTb()));
         tcAmount.setCellValueFactory(new PropertyValueFactory<>("monto"));

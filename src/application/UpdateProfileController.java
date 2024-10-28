@@ -24,7 +24,7 @@ public class UpdateProfileController {
 
     @FXML private CheckBox cbIsActive;
     @FXML private TextField tfAvailableMoney;
-    @FXML private Label lbErrorMessage;
+    @FXML private Label lb_ErrorMessage;
     @FXML private Button btReturn;
     @FXML private Button btEdit;
     @FXML private Button getBtnSelectPhoto;
@@ -32,8 +32,8 @@ public class UpdateProfileController {
     @FXML
     public void handleSelectPhoto(ActionEvent event) {
         if (btnSelectPhoto == null) {
-            lbErrorMessage.setText("Button for selecting photo is not initialized.");
-            lbErrorMessage.setTextFill(Color.RED);
+            lb_ErrorMessage.setText("Button for selecting photo is not initialized.");
+            lb_ErrorMessage.setTextFill(Color.WHITE);
             return;
         }
 
@@ -49,9 +49,9 @@ public class UpdateProfileController {
             try {
                 String filePath = selectedFile.getAbsolutePath();
                 tfRoutePhoto.setText(filePath);
-                Logic.notifyAction("Profile picture path updated successfully!", lbErrorMessage, Color.GREEN);
+                Logic.notifyAction("Profile picture path updated successfully!", lb_ErrorMessage, Color.GREEN);
             } catch (Exception e) {
-                Logic.notifyAction("Could not set the selected image path. Please try again.", lbErrorMessage, Color.RED);
+                Logic.notifyAction("Could not set the selected image path. Please try again.", lb_ErrorMessage, Color.WHITE);
             }
         }
     }
@@ -65,7 +65,7 @@ public class UpdateProfileController {
     public void handleEditAction(ActionEvent event) {
         String errorMessage = validateForm();
         if (errorMessage != null) {
-            Logic.notifyAction(errorMessage, lbErrorMessage, Color.RED);
+            Logic.notifyAction(errorMessage, lb_ErrorMessage, Color.WHITE);
             return;
         }
 
@@ -73,11 +73,11 @@ public class UpdateProfileController {
         double availableMoney = Logic.parseDouble(tfAvailableMoney.getText());
 
         if (phone == -1) {
-            Logic.notifyAction("Número de teléfono inválido",lbErrorMessage, Color.RED);
+            Logic.notifyAction("Número de teléfono inválido", lb_ErrorMessage, Color.WHITE);
             return;
         }
         if (availableMoney == -1.0) {
-            Logic.notifyAction("Cantidad de dinero disponible inválida", lbErrorMessage,Color.RED);
+            Logic.notifyAction("Cantidad de dinero disponible inválida", lb_ErrorMessage,Color.WHITE);
             return;
         }
 
@@ -97,13 +97,13 @@ public class UpdateProfileController {
             Logic.sleepTConfirm();
 
             if (LogicSockect.confirm()) {
-                Logic.notifyAction("Estudiante actualizado con éxito", lbErrorMessage, Color.GREEN);
+                Logic.notifyAction("Estudiante actualizado con éxito", lb_ErrorMessage, Color.GREEN);
                 SocketClient.closeWindows(btReturn,"/presentation/MainGUI.fxml");
             } else {
-                Logic.notifyAction("Error al actualizar el estudiante",lbErrorMessage, Color.RED);
+                Logic.notifyAction("Error al actualizar el estudiante", lb_ErrorMessage, Color.WHITE);
             }
         } else {
-            Logic.notifyAction("Operación cancelada", lbErrorMessage, Color.ORANGE);
+            Logic.notifyAction("Operación cancelada", lb_ErrorMessage, Color.ORANGE);
         }
     }
 
@@ -115,10 +115,12 @@ public class UpdateProfileController {
         if (!tfPhone.getText().matches("\\d{8,10}")) return "El número de teléfono debe tener entre 8 y 10 dígitos";
         if(tfPassword.getText().trim().isEmpty()) return "La contraseña no puede estar vacía";
         if(tfRoutePhoto.getText().trim().isEmpty()) return "Sin ruta de la foto";
+        if(tfPassword.getText().length() > 45) return "La contraseña no puede ser mayor a 45 caracteres";
         try {
             double money = Double.parseDouble(tfAvailableMoney.getText());
-            if (!Logic.isValidBalance(money, 5000, 15000)) {
-                return "La cantidad de dinero disponible debe estar entre 5000 y 15000";
+
+            if (money < 1000) {
+                return "La cantidad de dinero disponible debe ser mayor a 1000";
             }
         } catch (NumberFormatException e) {
             return "La cantidad de dinero disponible debe ser un número válido";
@@ -139,7 +141,7 @@ public class UpdateProfileController {
             tfPassword.setText(Logic.user.getPassword());
             tfRoutePhoto.setText(Logic.user.getRoutePhoto());
         } else {
-            lbErrorMessage.setText("No hay datos de estudiante disponibles.");
+            lb_ErrorMessage.setText("No hay datos de estudiante disponibles.");
         }
     }
 }

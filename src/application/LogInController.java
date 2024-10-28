@@ -21,38 +21,76 @@ public class LogInController {
 	private Button btEnter;
 	@FXML
 	private Label message;
-	
 
-	// Event Listener on Button[#btEnter].onAction
-	@FXML
-	public void initialize() {
-		SocketClient.connectToServer("192.168.0.143");
-	}
-	
+
+	//SocketClient.connectToServer("192.168.0.143");
+	//"192.168.0.143"
+
+
 	@FXML
 	public void btEnter(ActionEvent event) {
+		if(SocketClient.isConnected){
 
-		if (!tfId.getText().isEmpty() && !tfPassword.getText().isEmpty()) {
+			Logic.notifyAction("conectado", message, Color.RED);
+			if (!tfId.getText().isEmpty() && !tfPassword.getText().isEmpty()) {
 
-			SocketClient.reset();
-			// Enviar el mensaje al servidor
-			SocketClient.sendMessage("user,"+ tfId.getText()+ ","+ tfPassword.getText());
+					SocketClient.reset();
+					// Enviar el mensaje al servidor
+					SocketClient.sendMessage("user," + tfId.getText() + "," + tfPassword.getText());
 
-			Logic.sleepTrhead();
+					Logic.sleepTrhead();
+					// Una vez que se actualice el valor, continúa la validación , se valida si estan bien los datos
+					String validate = LogicSockect.validateUser();
 
-			// Una vez que se actualice el valor, continúa la validación
-			String validate = LogicSockect.validateUser();
+					if (validate != null) {
+						Logic.notifyAction(LogicSockect.validateUser(), message, Color.RED);
+					} else {
 
-			if (validate != null) {
-				Logic.notifyAction(LogicSockect.validateUser(), message, Color.RED);
+						SocketClient.closeWindows(btEnter, "/presentation/MainGUI.fxml");
+					}
+
 			}else{
-
-				System.out.println(Logic.user.toString() +" llega y llena en GUIcontroller");
-				SocketClient.closeWindows(btEnter,"/presentation/MainGUI.fxml");
+				Logic.notifyAction("No pueden haber campos vacios", message, Color.RED);
 			}
+
+
+		}else if(tfIp.getText().isEmpty()){
+			Logic.notifyAction("No puede estar vacio el IP", message, Color.RED);
+
+			//se valida que no esten empty los campos
+		} else if (!tfId.getText().isEmpty() && !tfPassword.getText().isEmpty()) {
+
+			boolean cn = SocketClient.connectToServer(tfIp.getText());
+
+
+			if (cn) {
+				tfIp.setDisable(true);
+				tfIp.getStyleClass().remove("input-field");
+				tfIp.getStyleClass().add("input-field-green");
+				SocketClient.reset();
+				// Enviar el mensaje al servidor
+				SocketClient.sendMessage("user," + tfId.getText() + "," + tfPassword.getText());
+
+
+				Logic.sleepTrhead();
+				// Una vez que se actualice el valor, continúa la validación , se valida si estan bien los datos
+				String validate = LogicSockect.validateUser();
+
+				if (validate != null) {
+					Logic.notifyAction(LogicSockect.validateUser(), message, Color.RED);
+				} else {
+
+					SocketClient.closeWindows(btEnter, "/presentation/MainGUI.fxml");
+				}
+			} else {
+				Logic.notifyAction("No se pudo conectar al servidor", message, Color.RED);
+				return;
+			}
+
 		}else{
 			Logic.notifyAction("No pueden haber campos vacios", message, Color.RED);
 		}
 	}
+
 
 }

@@ -88,6 +88,7 @@ public class ShowOrdersController {
     }
 
     private void showAllOrders() {
+        LogicSockect.meals.clear();
         fillListOrder("Todos");
     }
 
@@ -99,10 +100,13 @@ public class ShowOrdersController {
             beforeList = status;
         }
 
+        //se llena la table dependiendo del filtro
         if (status.equals("Pendiente")) {
             fillListOrder("Pendiente");
+
         } else if (status.equals("Preparando")) {
             fillListOrder("Preparando");
+
         } else if (status.equals("Entregado")) {
             fillListOrder("Entregado");
         }

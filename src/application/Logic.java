@@ -45,6 +45,7 @@ public class Logic {
 		return result.equals(buttonTypeYes);
 	}
 
+	//confirma una solicitud
 	public static void sleepTrhead(){
 		// Esperar hasta que 'validate' se actualice
 		while(SocketClient.validate == 0) {
@@ -56,6 +57,16 @@ public class Logic {
 			}
 		}
 	}
+
+	// Confirma una solicitud simplemente esperando un segundo
+	public static void sleepThread() {
+		try {
+			Thread.sleep(100);  // espera 1 segundo (1000 milisegundos)
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	//valida que este la confirmacion o se le da mas tiempo
 	public static void sleepTConfirm(){
 		int retries = 0;
 		try {
@@ -69,6 +80,7 @@ public class Logic {
 		}
 	}
 
+	//valida que la lista tenga elementos
 	public static void sleepTList(String typeList){
 		int retries = 0;
 		ArrayList<?> list = new ArrayList<>();

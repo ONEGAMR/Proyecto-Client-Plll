@@ -90,6 +90,11 @@ public class LogicSockect {
             user = "El perfil no pertenece a un estudiante";
         }
 
+        if(Logic.user != null && !Logic.user.isEstaActivo()){
+
+            user = "El perfil no esta inactivo";
+        }
+
         return user;
     }
 

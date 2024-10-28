@@ -351,6 +351,19 @@
     -fx-border-insets: 0;
 }
 
+.input-field-green {
+    -fx-background-color: #E2FFEB;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 12px 16px;
+    -fx-font-size: 14px;
+    -fx-prompt-text-fill: #259B49;
+    -fx-border-width: 2px;
+    -fx-border-color: #50C373;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+}
+
 .input-field:focused {
     -fx-border-color: #C3C3C3;
     -fx-border-width: 2px;
