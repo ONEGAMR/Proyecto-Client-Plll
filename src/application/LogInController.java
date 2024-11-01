@@ -22,6 +22,7 @@ public class LogInController {
 	@FXML
 	private Label message;
 
+	private String beforeIp;
 
 	//SocketClient.connectToServer("192.168.0.143");
 	//"192.168.0.143"
@@ -29,9 +30,20 @@ public class LogInController {
 
 	@FXML
 	public void btEnter(ActionEvent event) {
-		if(SocketClient.isConnected){
+		if(beforeIp != null && !beforeIp.equals(tfIp.getText())){
 
-			Logic.notifyAction("conectado", message, Color.RED);
+			tfIp.getStyleClass().remove("input-field-green");
+			tfIp.getStyleClass().add("input-field");
+
+			System.out.println("disconect");
+			SocketClient.disconnectFromServer();
+			System.out.println(SocketClient.isConnected);
+
+		}
+
+		if(SocketClient.isConnected && beforeIp.equals(tfIp.getText())){
+
+			System.out.println("entra");
 			if (!tfId.getText().isEmpty() && !tfPassword.getText().isEmpty()) {
 
 					SocketClient.reset();
@@ -58,19 +70,22 @@ public class LogInController {
 			Logic.notifyAction("No puede estar vacio el IP", message, Color.RED);
 
 			//se valida que no esten empty los campos
-		} else if (!tfId.getText().isEmpty() && !tfPassword.getText().isEmpty()) {
+		} else if (!tfId.getText().isEmpty() && !tfPassword.getText().isEmpty() && !SocketClient.isConnected) {
 
 			boolean cn = SocketClient.connectToServer(tfIp.getText());
 
-
 			if (cn) {
-				tfIp.setDisable(true);
+				//tfIp.setDisable(true);
+
+				beforeIp = tfIp.getText();
+
 				tfIp.getStyleClass().remove("input-field");
 				tfIp.getStyleClass().add("input-field-green");
+
 				SocketClient.reset();
+				System.out.println("entra 2");
 				// Enviar el mensaje al servidor
 				SocketClient.sendMessage("user," + tfId.getText() + "," + tfPassword.getText());
-
 
 				Logic.sleepTrhead();
 				// Una vez que se actualice el valor, continúa la validación , se valida si estan bien los datos

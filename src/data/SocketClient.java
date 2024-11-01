@@ -70,8 +70,34 @@ public class SocketClient {
         new Thread(() -> { initThread(); receiveMessages();
         }).start();
 
-        Logic.sleepThread();
-        return isConnected;
+       Logic.sleepThread();
+       return isConnected;
+    }
+
+    public static void disconnectFromServer() {
+        try {
+            isConnected = false;  // Primero marcamos como desconectado
+            Logic.sleepThread();
+
+            if (socket != null && !socket.isClosed()) {
+                // Cerramos los flujos primero
+                if (salida != null) {
+                    salida.close();
+                    salida = null;
+                }
+                if (entrada != null) {
+                    entrada.close();
+                    entrada = null;
+                }
+                // Finalmente cerramos el socket
+                socket.close();
+                socket = null;
+
+                System.out.println("Desconectado del servidor.");
+            }
+        } catch (IOException e) {
+            System.out.println("Error al desconectar del servidor: " + e.getMessage());
+        }
     }
 
     // Método estático para enviar un mensaje al servidor
@@ -97,82 +123,96 @@ public class SocketClient {
     }
 
     public synchronized static void receiveMessages() {
+        while (isConnected) {  // Cambiamos la condición del while
+            try {
+                if (entrada == null || socket == null || socket.isClosed()) {
+                    System.out.println("Conexión cerrada, terminando loop de recepción");
+                    break;
+                }
 
-        if(isConnected) {
-            while (true) {
-                try {
-                    String message = entrada.readLine();
+                String message = entrada.readLine();
+                if (message == null) {
+                    System.out.println("Conexión cerrada por el servidor");
+                    isConnected = false;
+                    break;
+                }
 
-                    if (message != null) {
-                        // Procesar el mensaje y actualizar la variable 'validate'
-                        if (LogicSockect.separarPalabras(message).get(0).equals("user")) {
-                            validate = Integer.parseInt(LogicSockect.separarPalabras(message).get(1));
-                            //si todo esta bien llena los datos del usuario con los datos recibidos
-                            System.out.println(message + " mensaje de llegada");
-                            if (LogicSockect.separarPalabras(message).size() > 2) {
+                // Procesar el mensaje y actualizar la variable 'validate'
+                if (LogicSockect.separarPalabras(message).get(0).equals("user")) {
+                    validate = Integer.parseInt(LogicSockect.separarPalabras(message).get(1));
+                    //si todo esta bien llena los datos del usuario con los datos recibidos
+                    System.out.println(message + " mensaje de llegada");
+                    if (LogicSockect.separarPalabras(message).size() > 2) {
 
-                                LogicSockect.fullUser(message);
-                            }
-                        }
+                        LogicSockect.fullUser(message);
+                    }
+                }
 
-                        //recibe la confirmacion de que se actualizo el usuario
-                        if (LogicSockect.separarPalabras(message).get(0).equals("us_confirm")) {
-                            System.out.println(message);
-                            LogicSockect.setUs_confirm(Boolean.parseBoolean(LogicSockect.separarPalabras(message).get(1)));
-                        }
+                //recibe la confirmacion de que se actualizo el usuario
+                if (LogicSockect.separarPalabras(message).get(0).equals("us_confirm")) {
+                    System.out.println(message);
+                    LogicSockect.setUs_confirm(Boolean.parseBoolean(LogicSockect.separarPalabras(message).get(1)));
+                }
 
-                        if (LogicSockect.separarPalabras(message).get(0).equals("listMeals")) {
+                if (LogicSockect.separarPalabras(message).get(0).equals("listMeals")) {
 
-                            System.out.println(message);
-                            LogicSockect.setListMeals(message);
+                    System.out.println(message);
+                    LogicSockect.setListMeals(message);
 
-                        }
+                }
 
-                        if (LogicSockect.separarPalabras(message).get(0).equals("listOrder")) {
+                if (LogicSockect.separarPalabras(message).get(0).equals("listOrder")) {
 
-                            System.out.println(message + "dentra a list order");
-                            LogicSockect.setListMealsOrder(message);
-                        }
+                    System.out.println(message + "dentra a list order");
+                    LogicSockect.setListMealsOrder(message);
+                }
 
-                        if (LogicSockect.separarPalabras(message).get(0).equals("listRecharge")) {
+                if (LogicSockect.separarPalabras(message).get(0).equals("listRecharge")) {
 
-                            System.out.println(message + "dentra a list recharge");
-                            LogicSockect.setListRecharge(message);
-                        }
+                    System.out.println(message + "dentra a list recharge");
+                    LogicSockect.setListRecharge(message);
+                }
 
-                        //se recibe la recargar
-                        if (LogicSockect.separarPalabras(message).get(0).equals("newBalance")) {
+                //se recibe la recargar
+                if (LogicSockect.separarPalabras(message).get(0).equals("newBalance")) {
 
 
-                            Logic.user.setDineroDisponible(Double.parseDouble(message.split(",")[1]));
-                            try {
-                                ServiceRequestController.getInstance().setBalance(Double.parseDouble(message.split(",")[1]));
-                            } catch (NullPointerException e) {
-                                System.out.println("La ventana no está abierta o el método getInstance() devolvió null.");
-                            } catch (NumberFormatException e) {
-                                System.out.println("El mensaje no contiene un número válido para el balance.");
-                            } catch (Exception e) {
-                                System.out.println("Ocurrió un error inesperado: " + e.getMessage());
-                            }
-
-                        }
-
-                        //Se recibe el cambio de estado de los pedidos
-                        if (LogicSockect.separarPalabras(message).get(0).equals("notifyStatus")) {
-
-                            System.out.println("Pedido" + message.split(",")[1]);
-
-                            // Mostrar la notificación en todas las ventanas activas
-                            NotificationManager.showNotificationInAllWindows(message.split(",")[1]);
-
-                        }
+                    Logic.user.setDineroDisponible(Double.parseDouble(message.split(",")[1]));
+                    try {
+                        ServiceRequestController.getInstance().setBalance(Double.parseDouble(message.split(",")[1]));
+                    } catch (NullPointerException e) {
+                        System.out.println("La ventana no está abierta o el método getInstance() devolvió null.");
+                    } catch (NumberFormatException e) {
+                        System.out.println("El mensaje no contiene un número válido para el balance.");
+                    } catch (Exception e) {
+                        System.out.println("Ocurrió un error inesperado: " + e.getMessage());
                     }
 
-                } catch (IOException e) {
-                    System.out.println("Error al recibir mensajes del servidor: " + e.getMessage());
-                    e.printStackTrace();
                 }
+
+                //Se recibe el cambio de estado de los pedidos
+                if (LogicSockect.separarPalabras(message).get(0).equals("notifyStatus")) {
+
+                    System.out.println("Pedido" + message.split(",")[1]);
+
+                    // Mostrar la notificación en todas las ventanas activas
+                    NotificationManager.showNotificationInAllWindows(message.split(",")[1]);
+
+                }
+
+            } catch (IOException e) {
+                if (!isConnected) {
+                    System.out.println("Conexión cerrada intencionalmente");
+                    break;
+                }
+                System.out.println("Error al recibir mensajes del servidor: " + e.getMessage());
+                isConnected = false;
+                break;
             }
+        }
+        // Limpieza final
+        if (!isConnected) {
+            disconnectFromServer();
         }
     }
 }

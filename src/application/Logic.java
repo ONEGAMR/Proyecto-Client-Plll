@@ -136,4 +136,5 @@ public class Logic {
 		alert.setContentText(message);
 		alert.showAndWait();
 	}
+
 }

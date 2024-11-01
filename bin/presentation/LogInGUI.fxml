@@ -9,11 +9,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.SVGPath?>
 
-<AnchorPane style="-fx-background-color: white;" styleClass="root" stylesheets="@application.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.LogInController">
-   <VBox alignment="CENTER" prefWidth="440" spacing="32" styleClass="login-container" AnchorPane.topAnchor="20.0">
+<AnchorPane prefWidth="440.0" style="-fx-background-color: white;" styleClass="root" stylesheets="@application.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.LogInController">
+   <VBox alignment="CENTER" prefWidth="440" spacing="24.0" styleClass="login-container" AnchorPane.topAnchor="0.0">
       <!-- Header with Logo and Title -->
       <VBox alignment="CENTER" styleClass="login-header">
-         <SVGPath  content="M16.0483 10.7762c2.7402 1.0522 5.5937-1.308 6.5067-2.9629 1.3027-2.3611 1.2644-5.6722-.7599-6.9477-2.4834-1.5649-6.4864-.0339-7.9722 2.5918-.8873 1.568-1.2266 4.0286-.1663 5.4852L1.1668 21.8178l1.8735 1.8735L16.0217 10.7363ZM7.0792 13.5976 11.1915 9.5 2.2522.5307C.1629 2.5925-.1887 6.3178 1.8731 8.4071l.0042.0042Zm8.2446 0 8.1822 8.3051-1.8848 1.8621-8.1822-8.305Z"  styleClass="logo-icon">
+         <SVGPath content="M16.0483 10.7762c2.7402 1.0522 5.5937-1.308 6.5067-2.9629 1.3027-2.3611 1.2644-5.6722-.7599-6.9477-2.4834-1.5649-6.4864-.0339-7.9722 2.5918-.8873 1.568-1.2266 4.0286-.1663 5.4852L1.1668 21.8178l1.8735 1.8735L16.0217 10.7363ZM7.0792 13.5976 11.1915 9.5 2.2522.5307C.1629 2.5925-.1887 6.3178 1.8731 8.4071l.0042.0042Zm8.2446 0 8.1822 8.3051-1.8848 1.8621-8.1822-8.305Z" styleClass="logo-icon">
             <VBox.margin>
                <Insets bottom="30.0" />
             </VBox.margin>
@@ -23,7 +23,7 @@
       </VBox>
 
       <!-- Form Fields Container -->
-      <VBox spacing="24" styleClass="form-container">
+      <VBox spacing="16.0" styleClass="form-container">
          <!-- Server IP Field -->
          <VBox spacing="10.0">
             <Label styleClass="field-label" text="IP del Servidor" />
@@ -50,4 +50,3 @@
       <Button fx:id="btEnter" maxWidth="Infinity" onAction="#btEnter" styleClass="login-button" text="INICIAR SESIÓN" />
    </VBox>
 </AnchorPane>
-
