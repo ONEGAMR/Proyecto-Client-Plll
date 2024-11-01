@@ -9,7 +9,6 @@ import java.util.Set;
 
 import application.Logic;
 import application.NotificationManager;
-import application.ServiceRequestController;
 import application.WindowManager;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -140,13 +139,19 @@ public class SocketClient {
                             LogicSockect.setListRecharge(message);
                         }
 
+                        if (LogicSockect.separarPalabras(message).get(0).equals("image") ||
+                                LogicSockect.separarPalabras(message).get(0).equals("singleImage") ||
+                                LogicSockect.separarPalabras(message).get(0).equals("imageCount")) {
+                            LogicSockect.handleImageTransfer(message);
+                        }
+
                         //se recibe la recargar
                         if (LogicSockect.separarPalabras(message).get(0).equals("newBalance")) {
 
 
                             Logic.user.setDineroDisponible(Double.parseDouble(message.split(",")[1]));
                             try {
-                                ServiceRequestController.getInstance().setBalance(Double.parseDouble(message.split(",")[1]));
+                                //ServiceRequestController.getInstance().setBalance(Double.parseDouble(message.split(",")[1]));
                             } catch (NullPointerException e) {
                                 System.out.println("La ventana no está abierta o el método getInstance() devolvió null.");
                             } catch (NumberFormatException e) {

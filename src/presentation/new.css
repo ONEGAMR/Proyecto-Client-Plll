@@ -1,0 +1,313 @@
+/* Global styles */
+.root {
+    -fx-font-family: "SF Pro Text", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -fx-background-color: #f8f9fa;
+}
+
+.main-container {
+    -fx-background-color: #f8f9fa;
+    -fx-padding: 0;
+}
+
+/* Header Styles */
+.header {
+    -fx-padding: 12px 16px;
+    -fx-background-color: white;
+    -fx-border-color: #dee2e6;
+    -fx-border-width: 0.5px;
+}
+
+.side-bar{
+-fx-padding: 12px 0px;
+    -fx-background-color: white;
+    -fx-border-color: #dee2e6;
+    -fx-border-width: 0.5px;
+}
+
+.menu-button {
+    -fx-background-color: transparent;
+    -fx-padding: 8px;
+    -fx-cursor: hand;
+}
+
+.menu-icon {
+    -fx-min-width: 24px;
+    -fx-min-height: 16px;
+    -fx-shape: "m17.713 10.128l-.246.566a.506.506 0 0 1-.934 0l-.246-.566a4.36 4.36 0 0 0-2.22-2.25l-.759-.339a.53.53 0 0 1 0-.963l.717-.319a4.37 4.37 0 0 0 2.251-2.326l.253-.611a.506.506 0 0 1 .942 0l.253.61a4.37 4.37 0 0 0 2.25 2.327l.718.32a.53.53 0 0 1 0 .962l-.76.338a4.36 4.36 0 0 0-2.219 2.251M2.828 12l4.243 4.243l-1.414 1.414L0 12l5.657-5.657L7.07 7.757zm15.515 5.657L24 12l-2.83-2.828l-1.414 1.414L21.171 12l-4.242 4.243z";
+    -fx-background-color: #212529;
+    -fx-fill: #212529;
+}
+
+.header-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #212529;
+}
+
+.user-info {
+    -fx-spacing: 8;
+}
+
+.user-name {
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+    -fx-text-fill: #212529;
+}
+
+.balance-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #6c757d;
+}
+
+.avatar-container {
+    -fx-min-width: 36px;
+    -fx-min-height: 36px;
+    -fx-max-width: 36px;
+    -fx-max-height: 36px;
+    -fx-alignment: center;
+}
+
+.avatar-clip {
+    -fx-fill: transparent;
+}
+
+.user-info {
+    -fx-spacing: 8px;
+    -fx-alignment: center-right;
+}
+}
+
+/* Selection Container */
+.selection-container {
+    -fx-background-color: white;
+    -fx-padding: 20px;
+    -fx-background-radius: 8px;
+    -fx-border-color: #dee2e6;
+        -fx-border-width: 0.5px;
+}
+
+.section-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #212529;
+}
+
+/* Toggle Buttons */
+.button-group {
+    -fx-spacing: 8;
+}
+
+.button-group .toggle-button {
+    -fx-background-color: white;
+    -fx-text-fill: #495057;
+    -fx-padding: 8px 16px;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-border-color: #dee2e6;
+    -fx-border-width: 1px;
+    -fx-cursor: hand;
+    -fx-font-size: 13px;
+}
+
+.button-group .toggle-button:selected {
+    -fx-background-color: #212529;
+    -fx-text-fill: white;
+    -fx-border-color: #212529;
+}
+
+/* Cart Styles */
+.cart-container {
+    -fx-background-color: white;
+    -fx-padding: 20px;
+    -fx-background-radius: 8px;
+    -fx-spacing: 16;
+    -fx-border-color: #dee2e6;
+    -fx-border-width: 0.5px;
+}
+
+.cart-item {
+    -fx-padding: 8px 0;
+    -fx-border-color: #dee2e6;
+    -fx-border-width: 0 0 1 0;
+}
+
+.cart-item-name {
+    -fx-font-size: 14px;
+    -fx-text-fill: #212529;
+}
+
+.cart-item-price {
+    -fx-font-size: 14px;
+    -fx-text-fill: #6c757d;
+}
+
+.summary-row Label {
+    -fx-font-size: 13px;
+    -fx-text-fill: #6c757d;
+}
+
+.total-row Label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #212529;
+}
+
+
+.total-row {
+    -fx-padding: 8px 0 16px 0;
+}
+
+/* Cart Item Quantity Circle */
+.cart-item-quantity {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6c757d;
+    -fx-padding: 2px 10px;
+    -fx-background-color: #e9ecef;
+    -fx-background-radius: 10px;
+    -fx-alignment: center;
+}
+
+
+/* Footer Styles */
+.cart-summary {
+    -fx-border-color: #dee2e6 transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+    -fx-spacing: 12;
+    -fx-padding: 16px 0 0 0;
+}
+
+
+.checkout-button {
+    -fx-background-color: #ff424f;
+    -fx-text-fill: white;
+    -fx-padding: 10px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+.clear-cart-button {
+    -fx-background-color: white;
+    -fx-text-fill: #495057;
+    -fx-padding: 10px;
+    -fx-background-radius: 5px;
+    -fx-border-color: #dee2e6;
+    -fx-border-width: 1px;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+    -fx-margin-top: 8px;
+}
+
+/* Meal Card Styles */
+.meal-card {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-min-width: 200px;
+    -fx-pref-width: -1;
+    -fx-max-width: infinity;
+    -fx-border-color: #dee2e6;
+    -fx-border-width: 0.5px;
+}
+
+.image-container {
+    -fx-min-width: 200px;
+    -fx-pref-width: -1;
+    -fx-max-width: infinity;
+    -fx-min-height: 160px;
+    -fx-pref-height: 160px;
+    -fx-max-height: 160px;
+    -fx-background-color: #f8f9fa;
+    -fx-overflow: hidden;
+}
+
+.meal-image {
+    -fx-background-color: transparent;
+}
+
+
+.meal-name {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #212529;
+}
+
+.meal-price {
+    -fx-font-size: 14px;
+    -fx-text-fill: #6c757d;
+}
+
+.quantity-control {
+    -fx-spacing: 8;
+    -fx-alignment: center;
+    -fx-padding: 0;
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: #dee2e6;
+    -fx-border-radius: 4;
+    -fx-min-height: 40px;
+    -fx-max-height: 40px;
+    -fx-pref-height: 40px;
+}
+
+.quantity-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-radius: 0;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-min-width: 40px;
+    -fx-max-width: 40px;
+    -fx-min-height: 40px;
+    -fx-max-height: 40px;
+    -fx-cursor: hand;
+}
+
+.quantity-button:hover {
+    -fx-background-color: #e9ecef;
+}
+
+.quantity-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 16px;
+}
+
+.add-to-cart-button {
+    -fx-background-color: #f8f9fa;
+    -fx-text-fill: #212529;
+    -fx-background-radius: 4;
+    -fx-border-color: #dee2e6;
+    -fx-border-radius: 4;
+    -fx-cursor: hand;
+    -fx-min-height: 40px;
+    -fx-max-height: 40px;
+    -fx-pref-height: 40px;
+    -fx-font-size: 14px;
+}
+
+.add-to-cart-button:hover {
+    -fx-background-color: #e9ecef;
+}
+
+.meals-grid-scroll {
+    -fx-background-color: transparent;
+    -fx-fit-to-width: true;
+}
+
+.meals-grid-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.meals-grid-scroll > .scroll-bar:vertical {
+    -fx-pref-width: 12;
+}
+
+.meals-grid-scroll > .scroll-bar:horizontal {
+    -fx-pref-height: 0;
+    -fx-opacity: 0;
+}
+
+.meals-grid {
+    -fx-alignment: center;
+}

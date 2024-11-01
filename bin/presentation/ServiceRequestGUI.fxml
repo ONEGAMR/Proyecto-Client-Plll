@@ -1,118 +1,139 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Circle?>
-<?import javafx.scene.shape.SVGPath?>
-
-<AnchorPane prefHeight="680.0" prefWidth="1100.0" styleClass="anchorPane" stylesheets="@application.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ServiceRequestController">
-	<VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-		<!-- Header Section -->
-		<HBox alignment="CENTER" maxHeight="90.0" minHeight="88.8" styleClass="header">
-			<HBox alignment="CENTER_LEFT" spacing="10.0" HBox.hgrow="ALWAYS">
-				<SVGPath content="M8.1 13.34l2.83-2.83L3.91 3.5c-1.56 1.56-1.56 4.09 0 5.66l4.19 4.18zm6.78-1.81c1.53.71 3.68.21 5.27-1.38 1.91-1.91 2.28-4.65.81-6.12-1.46-1.46-4.2-1.1-6.12.81-1.59 1.59-2.09 3.74-1.38 5.27L3.7 19.87l1.41 1.41L12 14.41l6.88 6.88 1.41-1.41L13.41 13l1.47-1.47z" fill="#FFFFFF" />
-				<Label styleClass="label-Title" text="Soda Universidad Nacional" />
-				<padding>
-					<Insets left="4.0" />
-				</padding>
-			</HBox>
-
-			<!-- User Profile Section -->
-			<HBox alignment="CENTER_RIGHT" spacing="12">
-				<VBox alignment="CENTER_RIGHT">
-					<Label fx:id="lblUserName" styleClass="user-name" />
-					<Label fx:id="lblBalance" styleClass="user-balance" />
-				</VBox>
-				<Circle fx:id="userAvatar" radius="20" styleClass="user-avatar" />
-			</HBox>
-
+<HBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" minWidth="1100.0" prefHeight="650.0" prefWidth="1100.0" stylesheets="@new.css" fx:controller="application.ServiceViewGUIController">
+	<children>
+		<VBox fx:id="vbSideBar" alignment="TOP_CENTER" minWidth="60.0" prefWidth="60.0" styleClass="side-bar">
+			<children>
+				<!--  Upper Menu Button  -->
+				<Button styleClass="menu-button">
+					<graphic>
+						<Region styleClass="menu-icon"/>
+					</graphic>
+				</Button>
+				<!--  Spacer to push footer down  -->
+				<Region VBox.vgrow="ALWAYS"/>
+				<!--  Footer Menu Button  -->
+				<Button styleClass="menu-button">
+					<graphic>
+						<Region styleClass="menu-icon"/>
+					</graphic>
+				</Button>
+			</children>
 			<padding>
-				<Insets bottom="12" left="24" right="24" top="12" />
+				<Insets top="12.0"/>
 			</padding>
-		</HBox>
-
-		<HBox VBox.vgrow="ALWAYS">
-			<!-- Main Content Section -->
-			<VBox spacing="0" HBox.hgrow="ALWAYS">
-				<!-- Selection Section -->
-				<VBox maxHeight="120.0" minHeight="120.0" styleClass="profile-container">
-					<HBox spacing="30.0" styleClass="selection-row">
-						<VBox spacing="10.0" HBox.hgrow="ALWAYS">
-							<Label styleClass="label-Subjet-Title" text="Seleccionar Fecha de Pedido">
-								<padding>
-									<Insets left="8.0" />
-								</padding></Label>
-							<ComboBox fx:id="cbReservationDay" maxWidth="Infinity" promptText="Viernes" styleClass="comboBox-normal" />
-						</VBox>
-
-						<VBox spacing="10.0">
-							<Label styleClass="label-Subjet-Title" text="Hora de Comida" />
-							<HBox spacing="24">
-								<RadioButton fx:id="rbBreakfast" selected="true" styleClass="meal-radio" text="Desayuno">
-									<toggleGroup>
-										<ToggleGroup fx:id="mealTimeGroup" />
-									</toggleGroup>
-								</RadioButton>
-								<RadioButton fx:id="rbLunch" styleClass="meal-radio" text="Almuerzo" toggleGroup="$mealTimeGroup" />
-							</HBox>
-						</VBox>
-						<padding>
-							<Insets right="30.0" />
-						</padding>
-					</HBox>
-				</VBox>
-
-				<!-- Main Content ScrollPane -->
-				<ScrollPane fitToWidth="true" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS">
+		</VBox>
+		<VBox styleClass="main-container" HBox.hgrow="ALWAYS">
+			<!--  Header  -->
+			<HBox alignment="CENTER_LEFT" styleClass="header">
+				<HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+					<Label styleClass="header-title" text="Pedido McDonald's"/>
+				</HBox>
+				<HBox alignment="CENTER_RIGHT" styleClass="user-info">
+					<VBox alignment="TOP_RIGHT">
+						<children>
+							<Label fx:id="userNameLabel" styleClass="user-name" text="Juan Pérez"/>
+							<Label fx:id="balanceLabel" styleClass="balance-label" text=".$10,000"/>
+						</children>
+					</VBox>
+					<StackPane fx:id="avatarContainer" styleClass="avatar-container">
+						<ImageView fx:id="profileImageView" fitHeight="36" fitWidth="36" preserveRatio="true"/>
+					</StackPane>
+				</HBox>
+			</HBox>
+			<!--  Main Content  -->
+			<HBox spacing="16.0" VBox.vgrow="ALWAYS">
+				<padding>
+					<Insets left="16.0" right="16.0" top="16.0"/>
+				</padding>
+				<!--  Left Side (Meals + Filters)  -->
+				<VBox minWidth="672.0" spacing="16" HBox.hgrow="ALWAYS">
 					<VBox>
-						<VBox styleClass="table-container">
-							<GridPane fx:id="mealsGrid" styleClass="meals-grid" VBox.vgrow="ALWAYS">
+						<Label styleClass="section-title" text="Seleccionar día y tipo de comida"/>
+						<HBox spacing="8" styleClass="button-group">
+							<ToggleButton fx:id="btnMonday" maxHeight="25.0" maxWidth="125.0" prefHeight="25.0" prefWidth="125.0" selected="true" text="Lunes">
+								<toggleGroup>
+									<ToggleGroup fx:id="dayGroup"/>
+								</toggleGroup>
+							</ToggleButton>
+							<ToggleButton fx:id="btnTuesday" maxHeight="25.0" maxWidth="125.0" prefHeight="25.0" prefWidth="125.0" text="Martes" toggleGroup="$dayGroup"/>
+							<ToggleButton fx:id="btnWednesday" maxHeight="25.0" maxWidth="125.0" prefHeight="25.0" prefWidth="125.0" text="Miércoles" toggleGroup="$dayGroup"/>
+							<ToggleButton fx:id="btnThursday" maxHeight="25.0" maxWidth="125.0" prefHeight="25.0" prefWidth="125.0" text="Jueves" toggleGroup="$dayGroup"/>
+							<ToggleButton fx:id="btnFriday" maxHeight="25.0" maxWidth="125.0" prefHeight="25.0" prefWidth="125.0" text="Viernes" toggleGroup="$dayGroup"/>
+							<padding>
+								<Insets top="16.0"/>
+							</padding>
+						</HBox>
+						<HBox spacing="8" styleClass="button-group">
+							<ToggleButton fx:id="btnBreakfast" maxHeight="25.0" maxWidth="125.0" prefHeight="25.0" prefWidth="125.0" selected="true" text="Desayuno">
+								<toggleGroup>
+									<ToggleGroup fx:id="timegroup"/>
+								</toggleGroup>
+							</ToggleButton>
+							<ToggleButton fx:id="btnLunch" maxHeight="25.0" maxWidth="125.0" prefHeight="25.0" prefWidth="125.0" text="Almuerzo" toggleGroup="$timegroup"/>
+							<padding>
+								<Insets top="8.0"/>
+							</padding>
+						</HBox>
+						<!--  Grid de Comidas  -->
+						<!--  Reemplaza el GridPane actual con esto  -->
+						<ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="meals-grid-scroll" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+							<GridPane fx:id="mealsGrid" hgap="10" styleClass="meals-grid" vgap="10">
 								<columnConstraints>
-									<ColumnConstraints hgrow="ALWAYS" percentWidth="33.33" />
-									<ColumnConstraints hgrow="ALWAYS" percentWidth="33.33" />
-									<ColumnConstraints hgrow="ALWAYS" percentWidth="33.33" />
+									<ColumnConstraints percentWidth="33.33"/>
+									<ColumnConstraints percentWidth="33.33"/>
+									<ColumnConstraints percentWidth="33.33"/>
 								</columnConstraints>
+								<padding>
+									<Insets top="16.0"/>
+								</padding>
 							</GridPane>
-						</VBox>
+						</ScrollPane>
 					</VBox>
-				</ScrollPane>
-			</VBox>
-
-			<!-- Right Side Order Summary -->
-			<VBox maxWidth="367.0" minWidth="320.0" prefHeight="600.0" prefWidth="365.0" styleClass="order-summary-sidebar">
-				<!-- Moved the Label outside of ScrollPane -->
-				<Label styleClass="label-Subjet-Title" text="Resumen del Pedido">
-					<padding>
-						<Insets left="24.0" right="16.0" top="24.0" />
-					</padding>
-				</Label>
-
-				<ScrollPane fitToWidth="true" styleClass="order-summary-scroll" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS">
-					<VBox spacing="16" styleClass="order-summary-content">
-						<VBox fx:id="orderItemsContainer" spacing="8" VBox.vgrow="ALWAYS" />
-					</VBox>
-				</ScrollPane>
-
-				<VBox styleClass="order-summary-footer">
-					<VBox spacing="4" styleClass="price-summary">
-						<Label fx:id="lblSubtotal" styleClass="label-subtotal" text="Subtotal: ₡0" />
-						<Label fx:id="lblTax" styleClass="label-tax" text="IVA (13%): ₡0" />
-						<Label fx:id="lblTotal" styleClass="label-total" text="Total: ₡0" />
-					</VBox>
-					<Button fx:id="btnPurchase" maxWidth="Infinity" onAction="#handlePurchaseAction" styleClass="button-red" text="Realizar Pedido" />
-					<Button fx:id="btReturn" maxWidth="Infinity" onAction="#handleReturnAction" styleClass="button-white" text="Volver" />
 				</VBox>
-			</VBox>
-		</HBox>
-	</VBox>
-</AnchorPane>
+				<!--  Cart (Right)  -->
+				<VBox minWidth="320.0" prefWidth="320" styleClass="cart-container">
+					<Label styleClass="section-title" text="Resumen del Pedido"/>
+					<!--  Reemplaza el contenido actual del VBox del carrito con:  -->
+					<VBox fx:id="cartItemsContainer" spacing="8">
+						<!--  Los items se agregarán dinámicamente  -->
+					</VBox>
+					<!--  Spacer to push footer down  -->
+					<Region VBox.vgrow="ALWAYS"/>
+					<!--  Footer Summary and Buttons  -->
+					<VBox styleClass="cart-summary">
+						<!--  En el VBox de cart-summary  -->
+						<HBox styleClass="summary-row">
+							<Label text="Subtotal" HBox.hgrow="ALWAYS"/>
+							<HBox HBox.hgrow="ALWAYS"/>
+							<Label fx:id="subtotalLabel" alignment="CENTER_RIGHT" text="0" HBox.hgrow="ALWAYS"/>
+						</HBox>
+						<HBox styleClass="summary-row">
+							<Label text="IVA (17.5%)" HBox.hgrow="ALWAYS"/>
+							<HBox HBox.hgrow="ALWAYS"/>
+							<Label fx:id="taxLabel" alignment="CENTER_RIGHT" text="0" HBox.hgrow="ALWAYS"/>
+						</HBox>
+						<HBox styleClass="total-row">
+							<Label text="Total" HBox.hgrow="ALWAYS"/>
+							<HBox HBox.hgrow="ALWAYS"/>
+							<Label fx:id="totalLabel" alignment="CENTER_RIGHT" text="0" HBox.hgrow="ALWAYS"/>
+						</HBox>
+						<Button fx:id="checkoutButton" maxWidth="Infinity" styleClass="checkout-button" text="Realizar Pedido"/>
+						<Button fx:id="clearCartButton" maxWidth="Infinity" styleClass="clear-cart-button" text="Vaciar Carrito"/>
+					</VBox>
+				</VBox>
+			</HBox>
+		</VBox>
+	</children>
+</HBox>

@@ -1,14 +1,17 @@
 package data;
 
 import application.Logic;
-import application.ServiceRequestController;
 import domain.Meal;
 import domain.Recharge;
 import domain.User;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 
 public class LogicSockect {
@@ -17,6 +20,18 @@ public class LogicSockect {
     public static ArrayList<Meal> meals = new ArrayList<>();
     public static ArrayList<Recharge> recharges = new ArrayList<>();
 
+    // Add this new method
+    public synchronized static void clearMeals() {
+        meals.clear();
+    }
+
+    // In LogicSockect.setListMeals
+    public synchronized static void setListMeals(String meal) {
+        String[] mealData = meal.split(",");
+        System.out.println("Adding meal: " + Arrays.toString(mealData));
+        meals.add(new Meal(mealData[1], Integer.parseInt(mealData[2]), mealData[3]));
+        System.out.println("Current meals size: " + meals.size());
+    }
 
     public static List<String> separarPalabras(String texto) {
         // Usa el método split() para separar por comas
@@ -25,36 +40,10 @@ public class LogicSockect {
         return new ArrayList<>(Arrays.asList(palabrasArray));
     }
 
-    private static ServiceRequestController serviceController;
-    private static int expectedMealCount = 0;
-
-    public static void setServiceController(ServiceRequestController controller) {
-        serviceController = controller;
-    }
-
-    public synchronized static void setListMeals(String meal) {
-        String[] mealData = meal.split(",");
-        meals.add(new Meal(mealData[1], Integer.parseInt(mealData[2])));
-
-        if (serviceController != null) {
-            serviceController.onMealReceived();
-        }
-    }
-
-    public synchronized static void setExpectedMealCount(int count) {
-        expectedMealCount = count;
-    }
-
-    public synchronized static int getExpectedMealCount() {
-        return expectedMealCount;
-    }
-
     public static void fullUser(String user) {
         if (Logic.user == null) {
             Logic.user = new User();  // Asegurar la inicialización
         }
-
-
 
         Logic.user.setCarnet(user.split(",")[2]);
         Logic.user.setNombre(user.split(",")[3]);
@@ -126,5 +115,39 @@ public class LogicSockect {
 
     public synchronized static boolean confirm() {
         return us_confirm;
+    }
+
+    public static void handleImageTransfer(String message) {
+        String[] parts = message.split(",", 3); // Dividimos en 3 partes máximo
+        if (parts[0].equals("imageCount")) {
+            System.out.println("Preparing to receive " + parts[1] + " images");
+            return;
+        }
+
+        if (parts.length != 3) return;
+
+        String imageType = parts[0]; // "image" o "singleImage"
+        String fileName = parts[1];
+        String base64Image = parts[2];
+
+        try {
+            // Crear el directorio si no existe
+            File directory = new File("src/images");
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+
+            // Decodificar la imagen
+            byte[] imageData = Base64.getDecoder().decode(base64Image);
+
+            // Guardar la imagen
+            File outputFile = new File("src/images/" + fileName);
+            Files.write(outputFile.toPath(), imageData);
+
+            System.out.println("Image saved: " + fileName);
+
+        } catch (IOException e) {
+            System.out.println("Error saving image " + fileName + ": " + e.getMessage());
+        }
     }
 }

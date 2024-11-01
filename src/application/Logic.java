@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class Logic {
 
-	public static User user;
+	public static User user = new User();
 	
 	public static void notifyAction(String message, Label noti, Color color) {
 		noti.setText(message);
