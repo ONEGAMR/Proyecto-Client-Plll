@@ -70,7 +70,7 @@ public class LogicSockect {
             user = "Contraseña incorrecta";
         }
 
-        if(Logic.user != null && !Logic.user.getTypeUser().equals("estudiante")){
+        if(Logic.user != null && Logic.user.getTypeUser() != null  && !Logic.user.getTypeUser().equals("estudiante")){
 
             SocketClient.setValidate(-2);
         }

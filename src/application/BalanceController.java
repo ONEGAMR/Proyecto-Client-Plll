@@ -22,11 +22,7 @@ public class BalanceController {
     @FXML private TableColumn<Recharge, String> tcRechargeDate;
     @FXML private TableColumn<Recharge, Double> tcAmount;
     @FXML private Label lbEmptyTableMessage;
-    @FXML private Button btConsult;
     @FXML private Button btReturn;
-    @FXML private Button btAddBalance;
-
-    private Student currentStudent;
 
     // Inicializa las columnas de la tabla
     @FXML
@@ -70,12 +66,6 @@ public class BalanceController {
         tcAmount.setCellValueFactory(new PropertyValueFactory<>("monto"));
     }
 
-    // Maneja la acción del botón de consultar saldo
-    @FXML
-    public void handleConsultBalance() {
-
-    }
-
     // Muestra un mensaje de error en la etiqueta
     private void notifyError(String message) {
         lbEmptyTableMessage.setText(message);
@@ -86,11 +76,5 @@ public class BalanceController {
     @FXML
     public void handleReturnAction() {
         SocketClient.closeWindows(btReturn,"/presentation/MainGUI.fxml");
-    }
-
-    // Maneja la acción del botón de agregar saldo
-    @FXML
-    public void handleAddBalanceAction() {
-       // Logic.closeCurrentWindowAndOpen("/presentation/AddBalanceGUI.fxml", (Stage) btAddBalance.getScene().getWindow());
     }
 }

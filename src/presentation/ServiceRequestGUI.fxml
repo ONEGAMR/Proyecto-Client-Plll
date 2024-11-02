@@ -26,12 +26,32 @@
 								<Region styleClass="menu-icon" />
 							</graphic>
 						</Button>
-						<Region VBox.vgrow="ALWAYS" />
-						<Button styleClass="menu-button">
+                  <Button fx:id="btServiceRequest" layoutX="20.0" layoutY="616.0" onAction="#handleServiceRequest" styleClass="menu-button">
+                     <graphic>
+                        <Region styleClass="menu-icon" />
+                     </graphic>
+                  </Button>
+                  <Button fx:id="btOpenBalance" layoutX="20.0" layoutY="23.0" onAction="#handleOpenBalance" styleClass="menu-button">
+                     <graphic>
+                        <Region styleClass="menu-icon" />
+                     </graphic>
+                  </Button>
+						<Button fx:id="btUpdateUser" onAction="#handleUpdateUser" styleClass="menu-button">
 							<graphic>
 								<Region styleClass="menu-icon" />
 							</graphic>
 						</Button>
+                  <Button fx:id="btOpenOrders" layoutX="20.0" layoutY="616.0" onAction="#handleOpenOrders" styleClass="menu-button">
+                     <graphic>
+                        <Region styleClass="menu-icon" />
+                     </graphic>
+                  </Button>
+						<Region VBox.vgrow="ALWAYS" />
+                  <Button fx:id="btLogOut" layoutX="20.0" layoutY="616.0" onAction="#handleLogOut" styleClass="menu-button">
+                     <graphic>
+                        <Region styleClass="menu-icon" />
+                     </graphic>
+                  </Button>
 					</children>
 					<padding>
 						<Insets top="12.0" />
