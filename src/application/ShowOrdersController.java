@@ -43,7 +43,7 @@ public class ShowOrdersController {
     private void initialize() {
         // Inicializar columnas de la tabla
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
         totalColumn.setCellValueFactory(new PropertyValueFactory<>("totalOrder"));
 
         // Inicializar el ComboBox con opciones de estado

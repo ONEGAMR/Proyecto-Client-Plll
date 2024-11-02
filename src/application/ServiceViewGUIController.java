@@ -111,7 +111,6 @@ public class ServiceViewGUIController {
 
     private void setupInitialData() {
         clearCartButton.setOnAction(e -> clearCart());
-        checkoutButton.setOnAction(e -> handleCheckout());
     }
 
     private void setupEventHandlers() {
@@ -248,13 +247,16 @@ public class ServiceViewGUIController {
         updateCartDisplay();
     }
 
-    private void handleCheckout() {
+    @FXML
+    private void handleCheckout(ActionEvent event) {
         if (cartItems.isEmpty()) {
             showAlert("Carrito vacío", "Agregue items al carrito antes de realizar el pedido.");
             return;
         }
 
-        double total = Double.parseDouble(totalLabel.getText().replace("₡", ""));
+        // Verificar saldo
+        String totalText = totalLabel.getText().replace(",", "");
+        double total = Double.parseDouble(totalText);
         double balance = Logic.user.getDineroDisponible();
 
         if (total > balance) {
@@ -262,14 +264,21 @@ public class ServiceViewGUIController {
             return;
         }
 
-        StringBuilder orderMessage = new StringBuilder("foodOrder");
+        // Enviar cada item como una orden separada
         for (Meal meal : cartItems.values()) {
-            orderMessage.append(",").append(meal.getName())
-                    .append(",").append(meal.getCantidad())
-                    .append(",").append(meal.getTotalOrder());
+            StringBuilder orderMessage = new StringBuilder("foodOrder");
+            orderMessage.append(",")
+                    .append(meal.getName())           // nameP
+                    .append(",")
+                    .append(meal.getCantidad())       // cantidad
+                    .append(",")
+                    .append(meal.getTotalOrder())     // total
+                    .append(",")
+                    .append(Logic.user.getCarnet());      // id del usuario
+
+            SocketClient.sendMessage(orderMessage.toString());
         }
 
-        SocketClient.sendMessage(orderMessage.toString());
         showAlert("Pedido realizado", "Su pedido ha sido procesado exitosamente.");
         clearCart();
     }

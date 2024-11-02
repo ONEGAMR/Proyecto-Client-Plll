@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Region?>
+
+<fx:root maxWidth="Infinity" styleClass="meal-card" stylesheets="@new.css" type="javafx.scene.layout.VBox"
+         xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+    <VBox maxWidth="Infinity" minWidth="200" prefWidth="200" spacing="12">
+        <StackPane fx:id="imageContainer" maxWidth="Infinity" styleClass="image-container"
+                   minWidth="200" prefWidth="200" minHeight="160" maxHeight="160">
+            <ImageView fx:id="mealImage" fitHeight="160" fitWidth="200"
+                       styleClass="meal-image" cache="true"
+                       cacheHint="SPEED"/>
+        </StackPane>
+        <VBox spacing="8" minHeight="120" maxHeight="120" prefHeight="120">
+            <padding>
+                <Insets bottom="16" left="16" right="16" />
+            </padding>
+            <Label fx:id="nameLabel" styleClass="meal-name" text="Nombre del plato" />
+            <Label fx:id="priceLabel" styleClass="meal-price" text="₡0" />
+            <Region VBox.vgrow="ALWAYS" />
+            <StackPane minHeight="40" maxHeight="40" prefHeight="40">
+                <children>
+                    <Button fx:id="addToCartButton" maxWidth="Infinity"
+                            styleClass="add-to-cart-button" text="Agregar al carrito" />
+                    <HBox fx:id="quantityContainer" maxWidth="Infinity"
+                          styleClass="quantity-control">
+                        <Button fx:id="decrementButton"
+                                styleClass="quantity-button" text="-" />
+                        <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                            <Label fx:id="quantityLabel" styleClass="quantity-label" text="2" />
+                        </HBox>
+                        <Button fx:id="incrementButton"
+                                styleClass="quantity-button" text="+" />
+                    </HBox>
+                </children>
+            </StackPane>
+        </VBox>
+    </VBox>
+</fx:root>
