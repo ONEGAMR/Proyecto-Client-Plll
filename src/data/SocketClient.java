@@ -8,7 +8,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -35,12 +34,7 @@ public class SocketClient {
 
             WindowManager.registerStage(stage);
 
-            Set<String> notificationPaths = Set.of(
-                    "/presentation/MainGUI.fxml",
-                    "/presentation/ServiceRequestGUI.fxml"
-            );
-
-            if (notificationPaths.contains(path)) {
+            if (path.equals("/presentation/MainLayout.fxml")) {
                 WindowManager.enableNotificationsForStage(stage);
             }
 
@@ -162,6 +156,11 @@ public class SocketClient {
                     LogicSockect.setUs_confirm(Boolean.parseBoolean(LogicSockect.separarPalabras(message).get(1)));
                 }
 
+                if (LogicSockect.separarPalabras(message).get(0).equals("listSize")) {
+                    LogicSockect.listSize = Integer.parseInt(LogicSockect.separarPalabras(message).get(1));
+                    System.out.println(message);
+                }
+
                 if (LogicSockect.separarPalabras(message).get(0).equals("listMeals")) {
 
                     System.out.println(message);
@@ -214,6 +213,9 @@ public class SocketClient {
 
                 }
 
+                if (LogicSockect.separarPalabras(message).get(0).equals("BD")) {
+                    System.out.println(LogicSockect.separarPalabras(message).get(1));
+                }
 
             } catch (IOException e) {
 

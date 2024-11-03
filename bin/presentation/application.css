@@ -1,5 +1,5 @@
 .root {
-    -color-primary: #E83033;
+    -color-primary: #F33941;
     -color-primary-dark: derive(-color-primary, -10%);
     -color-primary-darker: derive(-color-primary, -20%);
     -color-primary-light: derive(-color-primary, 10%);
@@ -41,7 +41,7 @@
 
 .header {
     -fx-background-color: -color-primary;
-    -fx-padding: 16px 24px;
+    -fx-padding: 12px 16px;
 }
 
 .label-Title {
@@ -77,7 +77,7 @@
     -fx-background-color: white;
     -fx-border-color: #f0f0f0;
     -fx-border-width: 0 0 1 0;
-    -fx-padding: 24 32px;
+    -fx-padding: 12 16px;
 }
 
 .selection-row {
@@ -145,7 +145,7 @@
 
 .table-container {
     -fx-background-color: transparent;
-    -fx-padding: 8 16 8 24;
+    -fx-padding: 8 16;
 }
 
 .meals-grid {
@@ -235,7 +235,7 @@
 }
 
 .order-summary-footer {
-    -fx-padding: 24px;
+    -fx-padding: 16 16;
     -fx-border-color: #f0f0f0;
     -fx-border-width: 1 0 0 0;
     -fx-background-color: white;
@@ -291,13 +291,9 @@
 .login-container {
     -fx-background-color: white;
     -fx-background-radius: 12px;
-    -fx-padding: 40px;
+    -fx-padding: 30px;
     -fx-max-width: 440px;
     -fx-alignment: center;
-}
-
-.login-header {
-    -fx-padding: 0 0 16px 0;
 }
 
 .logo-container {
@@ -708,5 +704,39 @@
 }
 
 .custom-checkbox:indeterminate .mark {
+    -fx-background-color: transparent;
+}
+
+
+
+.progress-indicator {
+    -fx-progress-color: white;
+}
+
+.progress-indicator .spinner {
+    -fx-background-color: transparent;
+}
+
+.progress-indicator:indeterminate .spinner {
+    -fx-background-color: transparent;
+}
+
+.progress-indicator .percentage {
+    -fx-fill: white;
+}
+
+.login-spinner {
+    -fx-progress-color: white;
+    -fx-min-width: 30px;
+    -fx-min-height: 30px;
+    -fx-max-width: 30px;
+    -fx-max-height: 30px;
+}
+
+.login-spinner .percentage {
+    -fx-fill: white;
+}
+
+.login-spinner .spinner {
     -fx-background-color: transparent;
 }

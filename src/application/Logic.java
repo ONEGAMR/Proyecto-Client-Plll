@@ -89,6 +89,7 @@ public class Logic {
 
 			list = LogicSockect.meals;
 		}
+
 		if(typeList.equals("recharges")){
 
 			list = LogicSockect.recharges;

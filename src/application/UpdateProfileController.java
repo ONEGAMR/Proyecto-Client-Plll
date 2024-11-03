@@ -21,21 +21,12 @@ public class UpdateProfileController {
     @FXML private TextField tfPassword;
     @FXML private TextField tfRoutePhoto;
     @FXML private Button btnSelectPhoto;
-
     @FXML private CheckBox cbIsActive;
     @FXML private TextField tfAvailableMoney;
     @FXML private Label lb_ErrorMessage;
-    @FXML private Button btReturn;
-    @FXML private Button btEdit;
-    @FXML private Button getBtnSelectPhoto;
 
     @FXML
     public void handleSelectPhoto(ActionEvent event) {
-        if (btnSelectPhoto == null) {
-            lb_ErrorMessage.setText("Button for selecting photo is not initialized.");
-            lb_ErrorMessage.setTextFill(Color.WHITE);
-            return;
-        }
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Profile Picture");
@@ -45,20 +36,9 @@ public class UpdateProfileController {
 
         File selectedFile = fileChooser.showOpenDialog(btnSelectPhoto.getScene().getWindow());
 
-        if (selectedFile != null) {
-            try {
-                String filePath = selectedFile.getAbsolutePath();
-                tfRoutePhoto.setText(filePath);
-                Logic.notifyAction("Profile picture path updated successfully!", lb_ErrorMessage, Color.GREEN);
-            } catch (Exception e) {
-                Logic.notifyAction("Could not set the selected image path. Please try again.", lb_ErrorMessage, Color.WHITE);
-            }
-        }
-    }
+        String filePath = selectedFile.getAbsolutePath();
+        tfRoutePhoto.setText(filePath);
 
-    @FXML
-    public void handleReturnAction(ActionEvent event) {
-        SocketClient.closeWindows(btReturn,"/presentation/MainGUI.fxml");
     }
 
     @FXML
@@ -98,7 +78,6 @@ public class UpdateProfileController {
 
             if (LogicSockect.confirm()) {
                 Logic.notifyAction("Estudiante actualizado con éxito", lb_ErrorMessage, Color.GREEN);
-                SocketClient.closeWindows(btReturn,"/presentation/MainGUI.fxml");
             } else {
                 Logic.notifyAction("Error al actualizar el estudiante", lb_ErrorMessage, Color.WHITE);
             }

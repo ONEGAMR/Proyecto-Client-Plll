@@ -8,35 +8,29 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="591.0" prefWidth="598.0" styleClass="root" stylesheets="@application.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.UpdateProfileController">
+<AnchorPane prefHeight="625.0" prefWidth="1040.0" styleClass="root" stylesheets="@application.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.UpdateProfileController">
 
 	<VBox prefHeight="675.0" prefWidth="598.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 
 		<!-- Header -->
-		<VBox styleClass="header">
-			<Label styleClass="label-Title" text="Editar Estudiante">
-            <padding>
-               <Insets top="10.0" />
-            </padding>
+		<VBox alignment="CENTER_LEFT" maxHeight="65.0" minHeight="65.0" prefHeight="65.0" styleClass="header">
+			<Label style="-fx-text-fill: white;" styleClass="header-title" stylesheets="@new.css" text="Editar perfil de usuario">
             <VBox.margin>
-               <Insets left="12.0" />
+               <Insets />
             </VBox.margin></Label>
-			<Label fx:id="lb_ErrorMessage" style="-fx-text-fill: white;" styleClass="login-subtitle" text="Actualiza la información del estudiante" textFill="WHITE">
-            <padding>
-               <Insets left="12.0" />
-            </padding></Label>
          <VBox.margin>
             <Insets />
          </VBox.margin>
 		</VBox>
 
 		<!-- Scrollable Content -->
-		<ScrollPane fitToWidth="true" styleClass="scroll-pane" VBox.vgrow="ALWAYS">
-			<VBox styleClass="profile-container">
+		<ScrollPane fitToWidth="true" prefWidth="1040.0" styleClass="scroll-pane" VBox.vgrow="ALWAYS">
+			<VBox alignment="TOP_CENTER" styleClass="profile-container">
 				<!-- Formulario -->
-				<VBox spacing="16">
+				<VBox spacing="20.0">
 					<!-- Carnet -->
 					<VBox spacing="8">
 						<Label styleClass="field-label" text="Carnet" />
@@ -87,15 +81,19 @@
 							<Button fx:id="btnSelectPhoto" maxHeight="1.7976931348623157E308" onAction="#handleSelectPhoto" prefWidth="200.0" styleClass="button-white" text="Seleccionar" />
 						</HBox>
 					</VBox>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
 				</VBox>
 			</VBox>
 		</ScrollPane>
 
 		<!-- Footer -->
-		<VBox prefWidth="598.0" styleClass="order-summary-footer">
+		<VBox prefWidth="1040.0" styleClass="order-summary-footer">
 			<HBox alignment="CENTER_RIGHT" spacing="8">
-				<Button fx:id="btReturn" onAction="#handleReturnAction" prefWidth="150.0" styleClass="button-white" text="Cancelar" />
-				<Button fx:id="btEdit" onAction="#handleEditAction" prefWidth="150.0" styleClass="button-red" text="Guardar Cambios" />
+            <Label fx:id="lb_ErrorMessage" styleClass="error-message" />
+            <Region maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+				<Button fx:id="btEdit" onAction="#handleEditAction" prefWidth="250.0" styleClass="button-red" text="Guardar Cambios" />
             <VBox.margin>
                <Insets right="16.0" />
             </VBox.margin>

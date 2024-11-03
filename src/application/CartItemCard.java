@@ -24,12 +24,20 @@ public class CartItemCard extends HBox {
         HBox spacer = new HBox();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        Label priceLabel = new Label(String.format("%,d", meal.getTotalOrder()));
-        priceLabel.getStyleClass().add("cart-item-price");
-        priceLabel.setAlignment(Pos.CENTER_RIGHT);
-        HBox.setHgrow(priceLabel, Priority.ALWAYS);
+        // Crear contenedor para precio y símbolo
+        HBox priceContainer = new HBox();
+        priceContainer.setAlignment(Pos.CENTER_RIGHT);
 
-        this.getChildren().addAll(nameLabel, quantityLabel, spacer, priceLabel);
+        Label currencyLabel = new Label("₡");
+        currencyLabel.getStyleClass().add("cart-item-price");
+
+        Label priceLabel = new Label(String.format("%,.2f", meal.getTotalOrder()));
+        priceLabel.getStyleClass().add("cart-item-price");
+
+        priceContainer.getChildren().addAll(currencyLabel, priceLabel);
+        HBox.setHgrow(priceContainer, Priority.ALWAYS);
+
+        this.getChildren().addAll(nameLabel, quantityLabel, spacer, priceContainer);
     }
 
     public Meal getMeal() {

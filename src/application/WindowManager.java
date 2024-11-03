@@ -20,14 +20,6 @@ public class WindowManager {
         notificationEnabledStages.add(stage);
     }
 
-    public static void disableNotificationsForStage(Stage stage) {
-        notificationEnabledStages.remove(stage);
-    }
-
-    public static Set<Stage> getActiveStages() {
-        return new HashSet<>(activeStages);
-    }
-
     public static Set<Stage> getNotificationEnabledStages() {
         return new HashSet<>(notificationEnabledStages);
     }

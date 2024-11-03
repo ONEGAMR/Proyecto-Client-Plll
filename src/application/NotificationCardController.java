@@ -1,12 +1,12 @@
 package application;
 
-import data.SocketClient;
 import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
 public class NotificationCardController {
@@ -15,28 +15,50 @@ public class NotificationCardController {
     @FXML private Button closeButton;
     @FXML private Button contentButton;
 
+    private MainLayoutController mainLayoutController;
+
     public void initialize() {
-        // Configurar el botón de cierre
         closeButton.setOnAction(event -> {
             closeNotification();
             event.consume();
         });
 
-        // Configurar el botón de contenido
         contentButton.setOnAction(event -> {
             handleNotificationClick();
             event.consume();
         });
     }
 
+    public void setMainLayoutController(MainLayoutController controller) {
+        this.mainLayoutController = controller;
+    }
+
     public void setNotification(String title) {
         descriptionLabel.setText(title);
-
         showNotification();
     }
 
     private void closeNotification() {
         hideNotification();
+    }
+
+    private void handleNotificationClick() {
+        // Cerrar la notificación
+        closeNotification();
+
+        // Obtener el MainLayoutController de la ventana principal
+        if (mainLayoutController == null) {
+            // Si no tenemos referencia directa, podemos buscarla
+            StackPane contentArea = (StackPane) contentButton.getScene().lookup("#contentArea");
+            if (contentArea != null) {
+                mainLayoutController = (MainLayoutController) contentArea.getParent().getUserData();
+            }
+        }
+
+        // Cargar la vista de Orders
+        if (mainLayoutController != null) {
+            mainLayoutController.loadView("/presentation/ShowOrders.fxml");
+        }
     }
 
     private void showNotification() {
@@ -64,10 +86,6 @@ public class NotificationCardController {
 
         slideOut.play();
         fadeOut.play();
-    }
-
-    private void handleNotificationClick() {
-        SocketClient.closeWindows(closeButton,"/presentation/ShowOrders.fxml");
     }
 
     public AnchorPane getNotificationContainer() {

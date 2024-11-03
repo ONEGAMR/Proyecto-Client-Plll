@@ -19,6 +19,9 @@ public class LogicSockect {
     public static boolean us_confirm;
     public static ArrayList<Meal> meals = new ArrayList<>();
     public static ArrayList<Recharge> recharges = new ArrayList<>();
+    public static int listSize;
+    public static int totalimages;
+    public static int imageCount;
 
     // Add this new method
     public synchronized static void clearMeals() {
@@ -32,6 +35,7 @@ public class LogicSockect {
         meals.add(new Meal(mealData[1], Integer.parseInt(mealData[2]), mealData[3]));
         System.out.println("Current meals size: " + meals.size());
     }
+
 
     public static List<String> separarPalabras(String texto) {
         // Usa el método split() para separar por comas
@@ -90,8 +94,7 @@ public class LogicSockect {
     public synchronized static void setListMealsOrder(String meal){
 
         String[] mealData = meal.split(",");
-        System.out.println(mealData[1] +" "+Integer.parseInt(mealData[2])+" "+Integer.parseInt(mealData[3])+"  Esto llega");
-        meals.add(new Meal(mealData[1],Integer.parseInt(mealData[2]),Integer.parseInt(mealData[3])));
+        meals.add(new Meal(mealData[1],Integer.parseInt(mealData[2]),Double.parseDouble(mealData[3])));
         System.out.println(meals);
     }
 
@@ -118,15 +121,18 @@ public class LogicSockect {
     }
 
     public static void handleImageTransfer(String message) {
-        String[] parts = message.split(",", 3); // Dividimos en 3 partes máximo
+
+
+        String[] parts = message.split(",", 3);
         if (parts[0].equals("imageCount")) {
             System.out.println("Preparing to receive " + parts[1] + " images");
+            totalimages = Integer.parseInt(parts[1]);
             return;
         }
 
         if (parts.length != 3) return;
 
-        String imageType = parts[0]; // "image" o "singleImage"
+        String imageType = parts[0];
         String fileName = parts[1];
         String base64Image = parts[2];
 
@@ -146,8 +152,59 @@ public class LogicSockect {
 
             System.out.println("Image saved: " + fileName);
 
+            imageCount++;
+            System.out.println("imagen sa: "+imageCount);
+
         } catch (IOException e) {
             System.out.println("Error saving image " + fileName + ": " + e.getMessage());
         }
+    }
+
+    public static void SleepList(){
+
+        if(listSize > 0) {
+            try {
+                while (meals.size() < listSize) {
+
+                    Thread.sleep(100);
+                }
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public static void SleepListRecharges(){
+
+        if(listSize > 0) {
+            try {
+                while (recharges.size() < listSize) {
+
+                    Thread.sleep(100);
+                }
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public static void SleepListImages(){
+
+        System.out.println("Cuenta "+imageCount);
+        if(totalimages > 0) {
+            try {
+                while (imageCount < totalimages) {
+
+                    Thread.sleep(100);
+                }
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public static  void resetSizeList(){
+
+        listSize = 0;
     }
 }

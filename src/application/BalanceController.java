@@ -36,11 +36,34 @@ public class BalanceController {
 
         //se limpia y se envia mensaje solicitando una lista con elementos
         LogicSockect.recharges.clear();
+        LogicSockect.resetSizeList();
+
         SocketClient.sendMessage("listRecharge,"+ Logic.user.getCarnet());
 
-        //Espera a que la lista este cargada
-        Logic.sleepTList("recharges");
+        try {
+            Thread.sleep(150);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
+        if(LogicSockect.listSize > 0){
+            int maxAttempts = 10;
+            int currentAttempt = 0;
+            while (LogicSockect.getListRecharges().isEmpty() && currentAttempt < maxAttempts) {
+                try {
+                    Thread.sleep(10);
+                    currentAttempt++;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    break;
+                }
+            }
+        }
+
+        //Espera a que la lista este cargada
+       // Logic.sleepTList("recharges");
+
+        LogicSockect.SleepListRecharges();
         //para sincronizar la tabla con el hilo
         Platform.runLater(() -> {
 

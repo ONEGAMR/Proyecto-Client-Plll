@@ -12,10 +12,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,11 +27,7 @@ public class ServiceViewGUIController {
     private static List<Meal> currentMeals = new ArrayList<>();
     private static ServiceViewGUIController instance;
 
-    @FXML private ToggleButton btnMonday;
-    @FXML private ToggleButton btnTuesday;
-    @FXML private ToggleButton btnWednesday;
-    @FXML private ToggleButton btnThursday;
-    @FXML private ToggleButton btnFriday;
+    @FXML private ComboBox<String> dayComboBox;
     @FXML private ToggleButton btnBreakfast;
     @FXML private ToggleButton btnLunch;
     @FXML private GridPane mealsGrid;
@@ -55,7 +51,9 @@ public class ServiceViewGUIController {
         setupEventHandlers();
         setupUserAvatar();
         updateUserInfo();
-        btnMonday.setSelected(true);
+        // Initialize the ComboBox
+        dayComboBox.getItems().addAll("Lunes", "Martes", "Miércoles", "Jueves", "Viernes");
+        dayComboBox.setValue("Lunes");
         btnBreakfast.setSelected(true);
         updateMeals();
     }
@@ -114,24 +112,35 @@ public class ServiceViewGUIController {
     }
 
     private void setupEventHandlers() {
-        ToggleGroup dayGroup = new ToggleGroup();
-        btnMonday.setToggleGroup(dayGroup);
-        btnTuesday.setToggleGroup(dayGroup);
-        btnWednesday.setToggleGroup(dayGroup);
-        btnThursday.setToggleGroup(dayGroup);
-        btnFriday.setToggleGroup(dayGroup);
-
         ToggleGroup mealTypeGroup = new ToggleGroup();
         btnBreakfast.setToggleGroup(mealTypeGroup);
         btnLunch.setToggleGroup(mealTypeGroup);
 
+        // Prevent deselection of all toggles
+        mealTypeGroup.selectedToggleProperty().addListener((observable, oldToggle, newToggle) -> {
+            if (newToggle == null) {
+                // If nothing is selected, reselect the old toggle
+                mealTypeGroup.selectToggle(oldToggle);
+            }
+        });
+
+        // Add ComboBox listener
+        dayComboBox.setOnAction(e -> updateMeals());
         btnBreakfast.setOnAction(e -> updateMeals());
         btnLunch.setOnAction(e -> updateMeals());
-        btnMonday.setOnAction(e -> updateMeals());
-        btnTuesday.setOnAction(e -> updateMeals());
-        btnWednesday.setOnAction(e -> updateMeals());
-        btnThursday.setOnAction(e -> updateMeals());
-        btnFriday.setOnAction(e -> updateMeals());
+    }
+
+    private String getSelectedDay() {
+        return dayComboBox.getValue();
+    }
+
+    public static void resetState() {
+        if (instance != null) {
+            instance.cleanup();
+        }
+        cartItems.clear();
+        activeMealCards.clear();
+        currentMeals.clear();
     }
 
     private void updateUserInfo() {
@@ -152,28 +161,33 @@ public class ServiceViewGUIController {
             String request = String.format("listMeals,%s,%s", selectedDay, selectedMealType);
             SocketClient.sendMessage(request);
 
-            int maxAttempts = 10;
-            int currentAttempt = 0;
-            while (LogicSockect.getListMeals().isEmpty() && currentAttempt < maxAttempts) {
-                try {
-                    Thread.sleep(100);
-                    currentAttempt++;
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    break;
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+            if(LogicSockect.listSize > 0){
+                int maxAttempts = 10;
+                int currentAttempt = 0;
+                while (LogicSockect.getListMeals().isEmpty() && currentAttempt < maxAttempts) {
+                    try {
+                        Thread.sleep(10);
+                        currentAttempt++;
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        break;
+                    }
                 }
             }
 
             currentMeals = new ArrayList<>(LogicSockect.getListMeals());
             System.out.println("UpdateMeals");
+
+            LogicSockect.SleepList();
             Platform.runLater(this::updateMealDisplay);
 
         }
-    }
-
-    private String getSelectedDay() {
-        ToggleButton selectedButton = (ToggleButton) btnMonday.getToggleGroup().getSelectedToggle();
-        return selectedButton != null ? selectedButton.getText() : null;
     }
 
     private String getSelectedMealType() {
@@ -243,7 +257,15 @@ public class ServiceViewGUIController {
     }
 
     private void clearCart() {
+        // Clear the cart items map
         cartItems.clear();
+
+        // Reset all meal cards to initial state
+        for (MealCard card : activeMealCards.values()) {
+            card.updateQuantityFromCart(0);
+        }
+
+        // Update the cart display
         updateCartDisplay();
     }
 
@@ -254,33 +276,85 @@ public class ServiceViewGUIController {
             return;
         }
 
-        // Verificar saldo
-        String totalText = totalLabel.getText().replace(",", "");
-        double total = Double.parseDouble(totalText);
+        double total = calculateTotal();
         double balance = Logic.user.getDineroDisponible();
+        String userCarnet = Logic.user.getCarnet();
 
+        // Show confirmation dialog
+        Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmDialog.setTitle("Confirmar compra");
+        confirmDialog.setHeaderText("¿Está seguro que desea realizar esta compra?");
+        confirmDialog.setContentText(String.format("Total a pagar: ₡%,.0f", total));
+
+        confirmDialog.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                if (!validateTransaction(total, balance)) {
+                    return;
+                }
+
+                processOrders(userCarnet, total);
+                updateUserBalance(balance, total);
+
+                // Reset all UI elements
+                resetUI();
+
+                showAlert("Pedido realizado", "Su pedido ha sido procesado exitosamente.");
+            }
+        });
+    }
+
+    private void resetUI() {
+        // Clear the cart
+        clearCart();
+
+        // Reset all meal cards to initial state
+        for (MealCard card : activeMealCards.values()) {
+            card.updateQuantityFromCart(0);
+        }
+
+        // Clear collections
+        cartItems.clear();
+        activeMealCards.clear();
+
+        // Update the display
+        updateCartDisplay();
+        updateMealDisplay();
+    }
+
+    private double calculateTotal() {
+        String totalText = totalLabel.getText().replace(",", "");
+        return Double.parseDouble(totalText);
+    }
+
+    private boolean validateTransaction(double total, double balance) {
         if (total > balance) {
             showAlert("Saldo insuficiente", "No tiene suficiente saldo para realizar este pedido.");
-            return;
+            return false;
         }
+        return true;
+    }
 
-        // Enviar cada item como una orden separada
-        for (Meal meal : cartItems.values()) {
-            StringBuilder orderMessage = new StringBuilder("foodOrder");
-            orderMessage.append(",")
-                    .append(meal.getName())           // nameP
-                    .append(",")
-                    .append(meal.getCantidad())       // cantidad
-                    .append(",")
-                    .append(meal.getTotalOrder())     // total
-                    .append(",")
-                    .append(Logic.user.getCarnet());      // id del usuario
+    private void processOrders(String userCarnet, double total) {
+        // Process individual orders
+        cartItems.values().forEach(meal -> {
+            String orderMessage = String.format("foodOrder,%s,%d,%.2f,%s",
+                    meal.getName(),
+                    meal.getCantidad(),
+                    meal.getTotalOrder(),
+                    userCarnet
+            );
+            SocketClient.sendMessage(orderMessage);
+        });
 
-            SocketClient.sendMessage(orderMessage.toString());
-        }
+        String deductionMessage = String.format("totalToDeduce,%s,%.2f", userCarnet, total);
+        SocketClient.sendMessage(deductionMessage);
+        System.out.println(deductionMessage);
+    }
 
-        showAlert("Pedido realizado", "Su pedido ha sido procesado exitosamente.");
-        clearCart();
+    private void updateUserBalance(double balance, double total) {
+        double newBalance = balance - total;
+        balanceLabel.setText(String.valueOf(newBalance));
+        Logic.user.setDineroDisponible(newBalance);
     }
 
     private void showAlert(String title, String content) {
@@ -291,8 +365,4 @@ public class ServiceViewGUIController {
         alert.showAndWait();
     }
 
-    @FXML
-    public void handleReturnAction(ActionEvent event) {
-        SocketClient.closeWindows(btReturn, "/presentation/MainGUI.fxml");
-    }
 }

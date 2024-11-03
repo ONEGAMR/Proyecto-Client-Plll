@@ -242,6 +242,8 @@ public class MealCard extends VBox {
         quantityContainer.toFront();
     }
 
+
+
     private void showAddToCartButton() {
         // Hacer visible el botón de agregar y ocultar el contenedor de cantidad
         quantityContainer.setVisible(false);

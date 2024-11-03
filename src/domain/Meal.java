@@ -5,7 +5,7 @@ public class Meal {
 	private String name;
 	private int price;
 	private int cantidad;
-	private int totalOrder;
+	private double totalOrder;
 	private String imagePath; // Nuevo campo para la ruta de la imagen
 
 	public Meal(String name, int price, String imagePath) {
@@ -14,7 +14,7 @@ public class Meal {
 		this.imagePath = imagePath;
 	}
 
-	public Meal(String name, int cantidad, int totalOrder) {
+	public Meal(String name, int cantidad, double totalOrder) {
 		this.name = name;
 		this.cantidad = cantidad;
 		this.totalOrder = totalOrder;
@@ -42,7 +42,7 @@ public class Meal {
 	public void setCantidad(int cantidad) {
 		this.cantidad = cantidad;
 	}
-	public int getTotalOrder() {
+	public double getTotalOrder() {
 		return totalOrder;
 	}
 	public void setTotalOrder(int totalOrder) {

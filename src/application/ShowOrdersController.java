@@ -32,9 +32,6 @@ public class ShowOrdersController {
     private TableColumn<Meal, Integer> totalColumn;
 
     @FXML
-    private Button btReturn;
-
-    @FXML
     private Button btAll;
 
     private String beforeList = "";
@@ -54,8 +51,6 @@ public class ShowOrdersController {
             filterOrders(newValue);
         });
 
-        // Manejar clics en los botones
-        btReturn.setOnAction(event -> handleReturn());
         btAll.setOnAction(event -> showAllOrders());
 
         // Cargar todos los pedidos por defecto
@@ -64,9 +59,31 @@ public class ShowOrdersController {
     }
 
     public void fillListOrder(String status) {
+        LogicSockect.resetSizeList();
         setStatusOrder(status);
-        Logic.sleepTList("meals");
+       // Logic.sleepTList("meals");
 
+//        try {
+//            Thread.sleep(100);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
+
+        if(LogicSockect.listSize > 0){
+            int maxAttempts = 10;
+            int currentAttempt = 0;
+            while (LogicSockect.getListMeals().isEmpty() && currentAttempt < maxAttempts) {
+                try {
+                    Thread.sleep(10);
+                    currentAttempt++;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    break;
+                }
+            }
+        }
+
+        LogicSockect.SleepList();
         Platform.runLater(() -> {
             List<Meal> meals = (List<Meal>) LogicSockect.getListMeals();
 
@@ -80,11 +97,13 @@ public class ShowOrdersController {
 
     public void setStatusOrder(String status) {
         SocketClient.sendMessage("listOrder," + Logic.user.getCarnet() + "," + status);
-        System.out.println("listOrder," + Logic.user.getCarnet() + "," + status + " Envio de orders");
-    }
+        try {
+            Thread.sleep(150);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
-    private void handleReturn() {
-        SocketClient.closeWindows(btReturn, "/presentation/MainGUI.fxml");
+        System.out.println("listOrder," + Logic.user.getCarnet() + "," + status + " Envio de orders");
     }
 
     private void showAllOrders() {
@@ -109,6 +128,9 @@ public class ShowOrdersController {
 
         } else if (status.equals("Entregado")) {
             fillListOrder("Entregado");
+
+        }else if (status.equals("Listo")) {
+            fillListOrder("Listo");
         }
     }
 }
