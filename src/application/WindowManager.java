@@ -1,12 +1,17 @@
 package application;
 
 import javafx.stage.Stage;
+
 import java.util.HashSet;
 import java.util.Set;
 
 public class WindowManager {
     private static final Set<Stage> activeStages = new HashSet<>();
     private static final Set<Stage> notificationEnabledStages = new HashSet<>();
+
+    public static Set<Stage> getStages() {
+        return new HashSet<>(activeStages);
+    }
 
     public static void registerStage(Stage stage) {
         activeStages.add(stage);

@@ -1,26 +1,33 @@
 package application;
 
 import domain.Meal;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.beans.value.ChangeListener;
+
 import java.io.File;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MealCard extends VBox {
-    private static final ConcurrentHashMap<String, WeakReference<Image>> IMAGE_CACHE = new ConcurrentHashMap<>();
+    private static final Map<String, Image> imageCache = new HashMap<>();
+
+    private final Meal meal;
+    private Image originalImage;
+    private int quantity = 0;
+    private boolean imageLoaded = false;
+    private ChangeListener<Number> sizeChangeListener;
 
     @FXML private ImageView mealImage;
     @FXML private Label nameLabel;
@@ -32,12 +39,6 @@ public class MealCard extends VBox {
     @FXML private HBox quantityContainer;
     @FXML private StackPane imageContainer;
 
-    private Image originalImage;
-    private int quantity = 0;
-    private final Meal meal;
-    private boolean imageLoaded = false;
-    private ChangeListener<Number> sizeChangeListener;
-
     public MealCard(Meal meal) {
         this.meal = meal;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/presentation/MealCard.fxml"));
@@ -46,11 +47,10 @@ public class MealCard extends VBox {
 
         try {
             loader.load();
+            initializeCard();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        initializeCard();
     }
 
     private void initializeCard() {
@@ -62,13 +62,19 @@ public class MealCard extends VBox {
         mealImage.fitWidthProperty().bind(imageContainer.widthProperty());
         mealImage.fitHeightProperty().bind(imageContainer.heightProperty());
 
-        setupImageLoading();
-        setupButtonHandlers();
         setupSizeListeners();
+        setupButtonHandlers();
+        setupInitialState();
+    }
 
+    private void setupInitialState() {
         quantityContainer.setVisible(false);
         quantityContainer.setManaged(false);
         updateButtonStates();
+
+        if (imageContainer.getWidth() > 0 && !imageLoaded) {
+            loadImageAsync();
+        }
     }
 
     private void setupSizeListeners() {
@@ -86,18 +92,12 @@ public class MealCard extends VBox {
         imageContainer.heightProperty().addListener(sizeChangeListener);
     }
 
-    private void setupImageLoading() {
-        if (imageContainer.getWidth() > 0 && !imageLoaded) {
-            loadImageAsync();
-        }
-    }
-
     private void loadImageAsync() {
         if (imageLoaded) return;
 
         Thread imageLoader = new Thread(() -> {
             try {
-                Image image = getCachedImage(meal.getImagePath());
+                Image image = loadImage(meal.getImagePath());
                 if (image != null && !image.isError()) {
                     originalImage = image;
                     javafx.application.Platform.runLater(this::updateImage);
@@ -113,9 +113,8 @@ public class MealCard extends VBox {
         imageLoader.start();
     }
 
-    private Image getCachedImage(String imagePath) {
-        WeakReference<Image> imageRef = IMAGE_CACHE.get(imagePath);
-        Image image = imageRef != null ? imageRef.get() : null;
+    private Image loadImage(String imagePath) {
+        Image image = imageCache.get(imagePath);
 
         if (image == null) {
             try {
@@ -124,11 +123,9 @@ public class MealCard extends VBox {
                     System.err.println("Image file not found: " + imagePath);
                     return null;
                 }
-                String imageUrl = imageFile.toURI().toString();
-                image = new Image(imageUrl);
-
+                image = new Image(imageFile.toURI().toString());
                 if (!image.isError()) {
-                    IMAGE_CACHE.put(imagePath, new WeakReference<>(image));
+                    imageCache.put(imagePath, image);
                 }
             } catch (Exception e) {
                 System.err.println("Exception loading image: " + e.getMessage());
@@ -142,16 +139,13 @@ public class MealCard extends VBox {
         if (originalImage == null || imageContainer.getWidth() <= 0 || imageContainer.getHeight() <= 0) {
             return;
         }
-        WritableImage croppedImage = cropAndScaleImage(originalImage, imageContainer.getWidth(), imageContainer.getHeight());
-        mealImage.setImage(croppedImage);
+        mealImage.setImage(cropAndScaleImage(originalImage, imageContainer.getWidth(), imageContainer.getHeight()));
     }
 
     private WritableImage cropAndScaleImage(Image sourceImage, double targetWidth, double targetHeight) {
         double sourceRatio = sourceImage.getWidth() / sourceImage.getHeight();
         double targetRatio = targetWidth / targetHeight;
-
-        double srcX = 0;
-        double srcY = 0;
+        double srcX = 0, srcY = 0;
         double srcWidth = sourceImage.getWidth();
         double srcHeight = sourceImage.getHeight();
 
@@ -166,7 +160,6 @@ public class MealCard extends VBox {
         Canvas canvas = new Canvas(targetWidth, targetHeight);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.drawImage(sourceImage, srcX, srcY, srcWidth, srcHeight, 0, 0, targetWidth, targetHeight);
-
         return canvas.snapshot(null, null);
     }
 
@@ -204,6 +197,39 @@ public class MealCard extends VBox {
         ServiceViewGUIController.addToCart(meal, this);
     }
 
+    private void updateQuantityLabel() {
+        quantityLabel.setText(String.valueOf(quantity));
+    }
+
+    private void updateButtonStates() {
+        decrementButton.setDisable(quantity == 0);
+    }
+
+    private void showQuantityControls() {
+        quantityContainer.setVisible(true);
+        quantityContainer.setManaged(true);
+        addToCartButton.setVisible(false);
+        addToCartButton.setManaged(false);
+        addToCartButton.toBack();
+        quantityContainer.toFront();
+    }
+
+    private void showAddToCartButton() {
+        quantityContainer.setVisible(false);
+        quantityContainer.setManaged(false);
+        addToCartButton.setVisible(true);
+        addToCartButton.setManaged(true);
+        quantityContainer.toBack();
+        addToCartButton.toFront();
+    }
+
+    private void addToCart() {
+        quantity = 1;
+        updateQuantityLabel();
+        showQuantityControls();
+        updateMealAndCart();
+    }
+
     public void restoreState(int quantity) {
         this.quantity = quantity;
         updateQuantityLabel();
@@ -220,47 +246,6 @@ public class MealCard extends VBox {
             showAddToCartButton();
         }
         updateButtonStates();
-    }
-
-    private void updateQuantityLabel() {
-        quantityLabel.setText(String.valueOf(quantity));
-    }
-
-    private void updateButtonStates() {
-        decrementButton.setDisable(quantity == 0);
-    }
-
-    private void showQuantityControls() {
-        // Hacer visible el contenedor de cantidad y ocular el botón de agregar
-        quantityContainer.setVisible(true);
-        quantityContainer.setManaged(true);
-        addToCartButton.setVisible(false);
-        addToCartButton.setManaged(false);
-
-        // Actualizar el orden en el StackPane
-        addToCartButton.toBack();
-        quantityContainer.toFront();
-    }
-
-
-
-    private void showAddToCartButton() {
-        // Hacer visible el botón de agregar y ocultar el contenedor de cantidad
-        quantityContainer.setVisible(false);
-        quantityContainer.setManaged(false);
-        addToCartButton.setVisible(true);
-        addToCartButton.setManaged(true);
-
-        // Actualizar el orden en el StackPane
-        quantityContainer.toBack();
-        addToCartButton.toFront();
-    }
-
-    private void addToCart() {
-        quantity = 1;
-        updateQuantityLabel();
-        showQuantityControls();
-        updateMealAndCart();
     }
 
     public void cleanup() {

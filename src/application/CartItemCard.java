@@ -7,10 +7,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
 public class CartItemCard extends HBox {
-    private final Meal meal;
 
     public CartItemCard(Meal meal) {
-        this.meal = meal;
         this.getStyleClass().add("cart-item");
         this.setSpacing(8.0);
 
@@ -24,7 +22,6 @@ public class CartItemCard extends HBox {
         HBox spacer = new HBox();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        // Crear contenedor para precio y símbolo
         HBox priceContainer = new HBox();
         priceContainer.setAlignment(Pos.CENTER_RIGHT);
 
@@ -38,9 +35,5 @@ public class CartItemCard extends HBox {
         HBox.setHgrow(priceContainer, Priority.ALWAYS);
 
         this.getChildren().addAll(nameLabel, quantityLabel, spacer, priceContainer);
-    }
-
-    public Meal getMeal() {
-        return meal;
     }
 }

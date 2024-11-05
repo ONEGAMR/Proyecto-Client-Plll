@@ -10,21 +10,24 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
 public class NotificationCardController {
-    @FXML public Label descriptionLabel;
     @FXML private AnchorPane notificationContainer;
+    @FXML private Label descriptionLabel;
     @FXML private Button closeButton;
     @FXML private Button contentButton;
 
     private MainLayoutController mainLayoutController;
+    private static final Duration ANIMATION_DURATION = Duration.seconds(0.5);
+    private static final double HIDDEN_POSITION = -100;
+    private static final double VISIBLE_POSITION = 0;
 
     public void initialize() {
         closeButton.setOnAction(event -> {
-            closeNotification();
+            hideNotification();
             event.consume();
         });
 
         contentButton.setOnAction(event -> {
-            handleNotificationClick();
+            handleContentButtonClick();
             event.consume();
         });
     }
@@ -38,57 +41,56 @@ public class NotificationCardController {
         showNotification();
     }
 
-    private void closeNotification() {
-        hideNotification();
+    public AnchorPane getNotificationContainer() {
+        return notificationContainer;
     }
 
-    private void handleNotificationClick() {
-        // Cerrar la notificación
-        closeNotification();
+    private void handleContentButtonClick() {
+        hideNotification();
+        loadOrdersView();
+    }
 
-        // Obtener el MainLayoutController de la ventana principal
+    private void loadOrdersView() {
         if (mainLayoutController == null) {
-            // Si no tenemos referencia directa, podemos buscarla
             StackPane contentArea = (StackPane) contentButton.getScene().lookup("#contentArea");
             if (contentArea != null) {
                 mainLayoutController = (MainLayoutController) contentArea.getParent().getUserData();
             }
         }
 
-        // Cargar la vista de Orders
         if (mainLayoutController != null) {
             mainLayoutController.loadView("/presentation/ShowOrders.fxml");
         }
     }
 
     private void showNotification() {
-        // Reset position
-        notificationContainer.setTranslateY(-100);
+        notificationContainer.setTranslateY(HIDDEN_POSITION);
         notificationContainer.setOpacity(0);
 
-        // Slide in and fade in animation
-        TranslateTransition slideIn = new TranslateTransition(Duration.seconds(0.5), notificationContainer);
-        slideIn.setToY(0);
-
-        FadeTransition fadeIn = new FadeTransition(Duration.seconds(0.5), notificationContainer);
-        fadeIn.setToValue(1);
+        TranslateTransition slideIn = createTranslateTransition(VISIBLE_POSITION);
+        FadeTransition fadeIn = createFadeTransition(1);
 
         slideIn.play();
         fadeIn.play();
     }
 
     private void hideNotification() {
-        TranslateTransition slideOut = new TranslateTransition(Duration.seconds(0.5), notificationContainer);
-        slideOut.setToY(-100);
-
-        FadeTransition fadeOut = new FadeTransition(Duration.seconds(0.5), notificationContainer);
-        fadeOut.setToValue(0);
+        TranslateTransition slideOut = createTranslateTransition(HIDDEN_POSITION);
+        FadeTransition fadeOut = createFadeTransition(0);
 
         slideOut.play();
         fadeOut.play();
     }
 
-    public AnchorPane getNotificationContainer() {
-        return notificationContainer;
+    private TranslateTransition createTranslateTransition(double toY) {
+        TranslateTransition transition = new TranslateTransition(ANIMATION_DURATION, notificationContainer);
+        transition.setToY(toY);
+        return transition;
+    }
+
+    private FadeTransition createFadeTransition(double toValue) {
+        FadeTransition transition = new FadeTransition(ANIMATION_DURATION, notificationContainer);
+        transition.setToValue(toValue);
+        return transition;
     }
 }

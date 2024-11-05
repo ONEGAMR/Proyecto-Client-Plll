@@ -1,146 +1,155 @@
 package application;
 
 import data.LogicSockect;
+import data.SocketClient;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.StackPane;
 import javafx.scene.control.ProgressIndicator;
-import data.SocketClient;
-import javafx.event.ActionEvent;
+import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
-import javafx.scene.layout.HBox;
 
 public class LogInController {
-	@FXML private TextField tfIp;
-	@FXML private TextField tfId;
-	@FXML private TextField tfPassword;
-	@FXML private Button btEnter;
-	@FXML private Label message;
-	@FXML private StackPane rootPane;
-	@FXML private Label btnText;
-	@FXML private ProgressIndicator btnSpinner;
+    @FXML public Label message;
+    @FXML private TextField tfIp;
+    @FXML private TextField tfId;
+    @FXML private TextField tfPassword;
+    @FXML private Button btEnter;
+    @FXML private Label btnText;
+    @FXML private ProgressIndicator btnSpinner;
 
-	private String beforeIp;
-	private ProgressIndicator progressIndicator;
-	private String originalButtonText;
+    private String beforeIp;
+    private boolean isProcessing = false;
 
-	@FXML
-	public void initialize() {
-		LogicSockect.imageCount = 0;
-		btnSpinner.setMaxSize(30, 30); // Increased size
-		btnText.setTextFill(Color.WHITE); // Set text color to white
-	}
+    @FXML
+    public void initialize() {
+        LogicSockect.imageCount = 0;
+        btnSpinner.setMaxSize(30, 30);
+        btnText.setTextFill(Color.WHITE);
+        LogicSockect.setActiveController(this);
+    }
 
-	private void showLoadingState() {
-		Platform.runLater(() -> {
-			btnText.setVisible(false);
-			btnSpinner.setVisible(true);
-			// Removed btEnter.setDisable(true);
-		});
-	}
+    @FXML
+    public void btEnter(ActionEvent event) {
+        if (isProcessing) return;
+        if (!validateInputs()) return;
+        showLoadingState();
+        startLoginProcess();
+    }
 
-	private void hideLoadingState() {
-		Platform.runLater(() -> {
-			btnSpinner.setVisible(false);
-			btnText.setVisible(true);
-			btEnter.setDisable(false);
-		});
-	}
+    private boolean validateInputs() {
+        if (hasIpChanged()) {
+            updateIpFieldStyle(false);
+            SocketClient.disconnectFromServer();
+        }
 
-	private void createLoadingIndicator() {
-		progressIndicator = new ProgressIndicator();
-		progressIndicator.setMaxSize(20, 20);
-		progressIndicator.setStyle("-fx-progress-color: white;");
-	}
+        if (tfIp.getText().isEmpty()) {
+            Logic.notifyAction("No puede estar vacio el IP", message, Color.RED);
+            return false;
+        }
 
-	@FXML
-	public void btEnter(ActionEvent event) {
-		if (beforeIp != null && !beforeIp.equals(tfIp.getText())) {
-			tfIp.getStyleClass().remove("input-field-green");
-			tfIp.getStyleClass().add("input-field");
-			SocketClient.disconnectFromServer();
-		}
+        if (tfId.getText().isEmpty() || tfPassword.getText().isEmpty()) {
+            Logic.notifyAction("No pueden haber campos vacios", message, Color.RED);
+            return false;
+        }
 
-		if (tfIp.getText().isEmpty()) {
-			Logic.notifyAction("No puede estar vacio el IP", message, Color.RED);
-			return;
-		}
+        return true;
+    }
 
-		if (tfId.getText().isEmpty() || tfPassword.getText().isEmpty()) {
-			Logic.notifyAction("No pueden haber campos vacios", message, Color.RED);
-			return;
-		}
+    private void startLoginProcess() {
+        Logic.sleepThread();
+        new Thread(() -> {
+            try {
+                if (SocketClient.isConnected && !hasIpChanged()) {
+                    handleLoginAttempt();
+                } else if (!SocketClient.isConnected) {
+                    handleNewConnection();
+                }
+            } catch (Exception e) {
+                handleError("Error de conexión");
+            }
+        }).start();
+    }
 
-		showLoadingState();
+    private void handleNewConnection() {
+        if (SocketClient.connectToServer(tfIp.getText())) {
+            beforeIp = tfIp.getText();
+            updateIpFieldStyle(true);
+            handleLoginAttempt();
+        } else {
+            handleError("No se pudo conectar al servidor");
+        }
+    }
 
-		new Thread(() -> {
-			try {
-				if (SocketClient.isConnected && beforeIp != null && beforeIp.equals(tfIp.getText())) {
-					handleLoginAttempt();
-				} else if (!SocketClient.isConnected) {
-					if (SocketClient.connectToServer(tfIp.getText())) {
-						beforeIp = tfIp.getText();
-						Platform.runLater(() -> {
-							tfIp.getStyleClass().remove("input-field");
-							tfIp.getStyleClass().add("input-field-green");
-						});
-						handleLoginAttempt();
-					} else {
-						Platform.runLater(() -> {
-							Logic.notifyAction("No se pudo conectar al servidor", message, Color.RED);
-							hideLoadingState();
-						});
-					}
-				}
-			} catch (Exception e) {
-				Platform.runLater(() -> {
-					Logic.notifyAction("Error de conexión", message, Color.RED);
-					hideLoadingState();
-				});
-			}
-		}).start();
-	}
+    private void handleLoginAttempt() {
+        try {
+            SocketClient.reset();
+            SocketClient.sendMessage("user," + tfId.getText() + "," + tfPassword.getText());
+            Logic.sleepTrhead();
 
-	private void handleLoginAttempt() {
-		try {
-			SocketClient.reset();
-			SocketClient.sendMessage("user," + tfId.getText() + "," + tfPassword.getText());
-			Logic.sleepTrhead();
+            String validate = LogicSockect.validateUser();
+            if (validate != null) {
+                handleError(validate);
+            } else {
+                notifySuccess();
+                processValidUser();
+            }
+        } catch (Exception e) {
+            handleError("Error en la validación");
+        }
+    }
 
-			String validate = LogicSockect.validateUser();
-			if (validate != null) {
-				Platform.runLater(() -> {
-					Logic.notifyAction(validate, message, Color.RED);
-					hideLoadingState();
-				});
-			} else {
-				processValidUser();
-			}
-		} catch (Exception e) {
-			Platform.runLater(() -> {
-				Logic.notifyAction("Error en la validación", message, Color.RED);
-				hideLoadingState();
-			});
-		}
-	}
+    private void processValidUser() {
+        try {
+            LogicSockect.SleepListImages();
+            Platform.runLater(() -> {
+                hideLoadingState();
+                SocketClient.closeWindows(btEnter, "/presentation/MainLayout.fxml");
+            });
+        } catch (Exception e) {
+            handleError("Error al cargar recursos");
+        }
+    }
 
-	private void processValidUser() {
-		try {
-			LogicSockect.SleepListImages();
-			Platform.runLater(() -> {
-				message.setTextFill(Color.GREEN);
-				message.setText("Recibiendo imágenes del servidor...");
-				hideLoadingState();
-				SocketClient.closeWindows(btEnter, "/presentation/MainLayout.fxml");
-			});
-		} catch (Exception e) {
-			Platform.runLater(() -> {
-				hideLoadingState();
-				Logic.notifyAction("Error al cargar recursos", message, Color.RED);
-			});
-		}
-	}
+    private void showLoadingState() {
+        Platform.runLater(() -> {
+            btnText.setVisible(false);
+            btnSpinner.setVisible(true);
+            isProcessing = true;
+        });
+    }
+
+    private void hideLoadingState() {
+        Platform.runLater(() -> {
+            btnSpinner.setVisible(false);
+            btnText.setVisible(true);
+            isProcessing = false;
+        });
+    }
+
+    private void handleError(String message) {
+        Platform.runLater(() -> {
+            Logic.notifyAction(message, this.message, Color.RED);
+            hideLoadingState();
+        });
+    }
+
+    private void notifySuccess() {
+        Platform.runLater(() ->
+                Logic.notifyAction("Recibiendo recursos...", message, Color.GREEN)
+        );
+    }
+
+    private boolean hasIpChanged() {
+        return beforeIp != null && !beforeIp.equals(tfIp.getText());
+    }
+
+    private void updateIpFieldStyle(boolean isSuccess) {
+        Platform.runLater(() -> {
+            tfIp.getStyleClass().remove(isSuccess ? "input-field" : "input-field-green");
+            tfIp.getStyleClass().add(isSuccess ? "input-field-green" : "input-field");
+        });
+    }
 }

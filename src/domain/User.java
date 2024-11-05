@@ -16,7 +16,8 @@ public class User {
     private String typeUser;
     private String routePhoto;
 
-    public User() {}
+    public User() {
+    }
 
     public User(String carnet) {
         this.carnet = carnet;
@@ -117,12 +118,12 @@ public class User {
         this.password = password;
     }
 
-    public void setTypeUser(String typeUser) {
-        this.typeUser = typeUser;
-    }
-
     public String getTypeUser() {
         return typeUser;
+    }
+
+    public void setTypeUser(String typeUser) {
+        this.typeUser = typeUser;
     }
 
     public String getRoutePhoto() {
@@ -149,9 +150,10 @@ public class User {
                 ", routePhoto=" + routePhoto +
                 '}';
     }
+
     public String toStringUserData() {
         return
                 carnet + "," + nombre + "," + correoElectronico + "," +
-                        telefono + "," + estaActivo + "," + fechaIngreso + "," + genero + "," + dineroDisponible+","+password+","+typeUser + "," + routePhoto;
+                        telefono + "," + estaActivo + "," + fechaIngreso + "," + genero + "," + dineroDisponible + "," + password + "," + typeUser + "," + routePhoto;
     }
 }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
+
+<AnchorPane prefHeight="293.0" prefWidth="431.0" style="-fx-border-radius: 10; -fx-background-radius: 10; -fx-border-color: black; -fx-border-width: 2;" styleClass="root" stylesheets="@application.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.DisconnectedDialogController">
+    <children>
+        <VBox alignment="CENTER" prefHeight="293.0" prefWidth="408.0" styleClass="login-container" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <padding>
+                <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+            </padding>
+            <VBox alignment="CENTER">
+                <SVGPath content="M22 14h-1c0-3.87-3.13-7-7-7h-1V5.73A2 2 0 1 0 10 4c0 .74.4 1.39 1 1.73V7h-1c-3.87 0-7 3.13-7 7H2c-.55 0-1 .45-1 1v3c0 .55.45 1 1 1h1v1a2 2 0 0 0 2 2h14c1.11 0 2-.89 2-2v-1h1c.55 0 1-.45 1-1v-3c0-.55-.45-1-1-1M9.86 16.68l-1.18 1.18l-1.18-1.18l-1.18 1.18l-1.18-1.18l1.18-1.18l-1.18-1.18l1.18-1.18l1.18 1.18l1.18-1.18l1.18 1.18l-1.18 1.18zm9 0l-1.18 1.18l-1.18-1.18l-1.18 1.18l-1.18-1.18l1.18-1.18l-1.18-1.18l1.18-1.18l1.18 1.18l1.18-1.18l1.18 1.18l-1.18 1.18z" scaleX="2.0" scaleY="2.0" styleClass="logo-icon">
+                    <VBox.margin>
+                        <Insets bottom="40.0" />
+                    </VBox.margin>
+                </SVGPath>
+            <VBox alignment="CENTER" spacing="4.0">
+               <children>
+      
+                      <Label styleClass="app-title" text="Error de Conexión con Server" />
+      
+                      <Label fx:id="statusLabel" alignment="CENTER" maxWidth="400.0" styleClass="login-subtitle" text="Se ha perdido la conexión con el servidor" textAlignment="CENTER" wrapText="true" />
+               </children>
+               <VBox.margin>
+                  <Insets bottom="25.0" />
+               </VBox.margin>
+            </VBox>
+            <VBox.margin>
+               <Insets top="20.0" />
+            </VBox.margin>
+            </VBox>
+
+            <Button fx:id="logoutButton" onAction="#handleLogout" prefHeight="40.0" prefWidth="250.0" styleClass="login-button" text="CERRAR SESIÓN" />
+        </VBox>
+    </children>
+</AnchorPane>

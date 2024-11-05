@@ -10,7 +10,6 @@
 
 <AnchorPane fx:id="notificationContainer" style="-fx-background-color: transparent; -fx-background-radius: 10px; -fx-border-radius: 10px;" stylesheets="@notification.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.NotificationCardController">
     <HBox styleClass="notification">
-        <!-- Área principal de contenido -->
         <Button fx:id="contentButton" styleClass="content-button" HBox.hgrow="ALWAYS">
             <graphic>
                 <HBox alignment="CENTER_LEFT" spacing="8.0">
@@ -32,7 +31,6 @@
          </HBox.margin>
         </Button>
 
-        <!-- Área del botón cerrar -->
         <Button fx:id="closeButton" styleClass="notification-close">
             <graphic>
                 <SVGPath content="M6 18L18 6M6 6l12 12" styleClass="notification-close-icon" />

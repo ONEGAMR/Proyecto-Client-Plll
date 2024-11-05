@@ -8,52 +8,53 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-
 import java.util.List;
 
 public class ShowOrdersController {
+    private static final int SOCKET_WAIT_TIME = 500;
+    private static final int MAX_ATTEMPTS = 10;
+    private static final int RETRY_DELAY = 10;
 
-    @FXML
-    private ComboBox<String> cmStatus;
+    private String previousStatus = "";
 
-    @FXML
-    private TableView<Meal> tableOrders;
-
-    @FXML
-    private TableColumn<Meal, String> nameColumn;
-
-    @FXML
-    private TableColumn<Meal, Integer> quantityColumn;
-
-    @FXML
-    private TableColumn<Meal, Integer> totalColumn;
-
-    @FXML
-    private Button btAll;
-
-    private String beforeList = "";
+    @FXML private ComboBox<String> cmStatus;
+    @FXML private TableView<Meal> tableOrders;
+    @FXML private TableColumn<Meal, String> nameColumn;
+    @FXML private TableColumn<Meal, Integer> quantityColumn;
+    @FXML private TableColumn<Meal, Integer> totalColumn;
+    @FXML private Button btAll;
 
     @FXML
     private void initialize() {
-        // Inicializar columnas de la tabla
+        setupTableColumns();
+        setupStatusComboBox();
+        setupEventHandlers();
+        loadInitialOrders();
+    }
+
+    private void setupTableColumns() {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
         totalColumn.setCellValueFactory(new PropertyValueFactory<>("totalOrder"));
+    }
 
-        // Inicializar el ComboBox con opciones de estado
+    private void setupStatusComboBox() {
         cmStatus.getItems().addAll("Pendiente", "Preparando", "Entregado", "Listo");
-
-        // Añadir listener para cambios en la selección del ComboBox
         cmStatus.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
-            filterOrders(newValue);
+            if (newValue != null) {
+                filterOrders(newValue);
+            }
         });
+    }
 
-        btAll.setOnAction(event -> showAllOrders());
+    private void setupEventHandlers() {
+        btAll.setOnAction(event -> loadInitialOrders());
+    }
 
-        // Cargar todos los pedidos por defecto
+    private void loadInitialOrders() {
         LogicSockect.meals.clear();
         fillListOrder("Todos");
     }
@@ -61,76 +62,53 @@ public class ShowOrdersController {
     public void fillListOrder(String status) {
         LogicSockect.resetSizeList();
         setStatusOrder(status);
-       // Logic.sleepTList("meals");
 
-//        try {
-//            Thread.sleep(100);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
-
-        if(LogicSockect.listSize > 0){
-            int maxAttempts = 10;
-            int currentAttempt = 0;
-            while (LogicSockect.getListMeals().isEmpty() && currentAttempt < maxAttempts) {
-                try {
-                    Thread.sleep(10);
-                    currentAttempt++;
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    break;
-                }
-            }
+        if (LogicSockect.listSize > 0) {
+            waitForMeals();
         }
 
         LogicSockect.SleepList();
-        Platform.runLater(() -> {
-            List<Meal> meals = (List<Meal>) LogicSockect.getListMeals();
+        updateTableView();
+    }
 
-            if (meals != null && !meals.isEmpty()) {
-                tableOrders.setItems(FXCollections.observableArrayList(meals));
-            } else {
-                tableOrders.setItems(FXCollections.observableArrayList());
+    private void waitForMeals() {
+        int currentAttempt = 0;
+        while (LogicSockect.getListMeals().isEmpty() && currentAttempt < MAX_ATTEMPTS) {
+            try {
+                Thread.sleep(RETRY_DELAY);
+                currentAttempt++;
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
             }
+        }
+    }
+
+    private void updateTableView() {
+        Platform.runLater(() -> {
+            List<Meal> meals = LogicSockect.getListMeals();
+            tableOrders.setItems(FXCollections.observableArrayList(
+                    meals != null ? meals : FXCollections.emptyObservableList()
+            ));
         });
     }
 
-    public void setStatusOrder(String status) {
-        SocketClient.sendMessage("listOrder," + Logic.user.getCarnet() + "," + status);
+    private void setStatusOrder(String status) {
+        String message = String.format("listOrder,%s,%s", Logic.user.getCarnet(), status);
+        SocketClient.sendMessage(message);
         try {
-            Thread.sleep(150);
+            Thread.sleep(SOCKET_WAIT_TIME);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Error esperando por la respuesta del socket", e);
         }
-
-        System.out.println("listOrder," + Logic.user.getCarnet() + "," + status + " Envio de orders");
-    }
-
-    private void showAllOrders() {
-        LogicSockect.meals.clear();
-        fillListOrder("Todos");
     }
 
     private void filterOrders(String status) {
-        // Verificar si el nuevo menú es diferente al anterior
-        if (!status.equals(beforeList)) {
-            System.out.println("Nuevo menú seleccionado: " + status);
+        if (!status.equals(previousStatus)) {
             LogicSockect.meals.clear();
-            beforeList = status;
-        }
-
-        //se llena la table dependiendo del filtro
-        if (status.equals("Pendiente")) {
-            fillListOrder("Pendiente");
-
-        } else if (status.equals("Preparando")) {
-            fillListOrder("Preparando");
-
-        } else if (status.equals("Entregado")) {
-            fillListOrder("Entregado");
-
-        }else if (status.equals("Listo")) {
-            fillListOrder("Listo");
+            previousStatus = status;
+            fillListOrder(status);
         }
     }
 }

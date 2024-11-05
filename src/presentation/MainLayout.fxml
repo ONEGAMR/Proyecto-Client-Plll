@@ -1,68 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Tooltip?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="625.0" prefWidth="1100.0" styleClass="root" stylesheets="@new.css"
+            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+            AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/21"
+            fx:controller="application.MainLayoutController">
+    <children>
+        <HBox fx:id="mainContainer" styleClass="root" stylesheets="@application.css" AnchorPane.bottomAnchor="0.0"
+              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <VBox fx:id="vbSideBar" alignment="TOP_CENTER" minWidth="70.0" prefWidth="70.0" styleClass="side-bar"
+                  stylesheets="@application.css">
 
-<AnchorPane styleClass="root" stylesheets="@new.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainLayoutController">
-   <children>
-      <HBox fx:id="mainContainer" minWidth="1100.0" prefHeight="625.0" prefWidth="1100.0">
-          <VBox fx:id="vbSideBar" alignment="TOP_CENTER" minWidth="70.0" prefWidth="70.0" styleClass="side-bar">
+                <Button fx:id="btServiceRequest" onAction="#handleServiceRequest" styleClass="menu-button">
+                    <graphic>
+                        <Region styleClass="meals-icon"/>
+                    </graphic>
+                    <tooltip>
+                        <Tooltip text="Servicios"/>
+                    </tooltip>
+                    <VBox.margin>
+                        <Insets/>
+                    </VBox.margin>
+                </Button>
 
-              <!-- Buttons -->
-              <Button fx:id="btServiceRequest" onAction="#handleServiceRequest" styleClass="menu-button">
-                  <graphic>
-                      <Region styleClass="meals-icon" />
-                  </graphic>
-                  <tooltip>
-                      <Tooltip text="Servicios" />
-                  </tooltip>
-              </Button>
+                <Button fx:id="btOpenBalance" onAction="#handleOpenBalance" styleClass="menu-button">
+                    <graphic>
+                        <Region styleClass="balance-icon"/>
+                    </graphic>
+                    <tooltip>
+                        <Tooltip text="Balance"/>
+                    </tooltip>
+                </Button>
 
-              <Button fx:id="btOpenBalance" onAction="#handleOpenBalance" styleClass="menu-button">
-                  <graphic>
-                      <Region styleClass="balance-icon" />
-                  </graphic>
-                  <tooltip>
-                      <Tooltip text="Balance" />
-                  </tooltip>
-              </Button>
+                <Button fx:id="btUpdateUser" onAction="#handleUpdateUser" styleClass="menu-button">
+                    <graphic>
+                        <Region styleClass="profile-icon"/>
+                    </graphic>
+                    <tooltip>
+                        <Tooltip text="Perfil"/>
+                    </tooltip>
+                </Button>
 
-              <Button fx:id="btUpdateUser" onAction="#handleUpdateUser" styleClass="menu-button">
-                  <graphic>
-                      <Region styleClass="profile-icon" />
-                  </graphic>
-                  <tooltip>
-                      <Tooltip text="Perfil" />
-                  </tooltip>
-              </Button>
+                <Button fx:id="btOpenOrders" onAction="#handleOpenOrders" styleClass="menu-button">
+                    <graphic>
+                        <Region styleClass="orders-icon"/>
+                    </graphic>
+                    <tooltip>
+                        <Tooltip text="Pedidos"/>
+                    </tooltip>
+                </Button>
 
-              <Button fx:id="btOpenOrders" onAction="#handleOpenOrders" styleClass="menu-button">
-                  <graphic>
-                      <Region styleClass="orders-icon" />
-                  </graphic>
-                  <tooltip>
-                      <Tooltip text="Pedidos" />
-                  </tooltip>
-              </Button>
+                <Region VBox.vgrow="ALWAYS"/>
 
-              <Region VBox.vgrow="ALWAYS" />
+                <Button fx:id="btLogOut" onAction="#handleLogOut" styleClass="menu-button">
+                    <graphic>
+                        <Region styleClass="logout-icon"/>
+                    </graphic>
+                    <tooltip>
+                        <Tooltip text="Salir"/>
+                    </tooltip>
+                </Button>
+            </VBox>
 
-              <Button fx:id="btLogOut" onAction="#handleLogOut" styleClass="menu-button">
-                  <graphic>
-                      <Region styleClass="logout-icon" />
-                  </graphic>
-                  <tooltip>
-                      <Tooltip text="Salir" />
-                  </tooltip>
-              </Button>
-          </VBox>
-      
-          <StackPane fx:id="contentArea" HBox.hgrow="ALWAYS" />
-      </HBox>
-   </children>
+            <StackPane fx:id="contentArea" maxHeight="Infinity" maxWidth="Infinity" style="-fx-background-color: black;"
+                       HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS"/>
+        </HBox>
+    </children>
 </AnchorPane>

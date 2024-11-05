@@ -11,7 +11,6 @@
 
 <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="625.0" prefWidth="1040.0" styleClass="root" stylesheets="@application.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ShowOrdersController">
 
-    <!-- Header Section with proper padding -->
     <VBox alignment="CENTER_LEFT" maxHeight="65.0" minHeight="65.0" prefHeight="65.0" styleClass="header">
         <Label style="-fx-text-fill: white;" styleClass="header-title" stylesheets="@new.css" text="Gestión de Pedidos">
          <VBox.margin>
@@ -20,28 +19,20 @@
         </Label>
     </VBox>
 
-    <!-- Main Content Container with margins -->
     <VBox prefWidth="600.0" VBox.vgrow="ALWAYS">
         <padding>
             <Insets bottom="16.0" left="16.0" right="16.0" top="24.0" />
         </padding>
-
-        <!-- Title Section with proper spacing -->
-        <VBox spacing="8" styleClass="title-container">
-            <Label styleClass="main-title" text="Lista de Pedidos" />
-            <Label styleClass="subtitle" text="Visualiza y gestiona todos los pedidos" />
-        </VBox>
         <HBox prefHeight="45.0" prefWidth="1008.0" spacing="16.0" styleClass="root" stylesheets="@new.css">
             <children>
                 <ComboBox fx:id="cmStatus" maxHeight="1.7976931348623157E308" maxWidth="Infinity" promptText="Seleccione un estado" stylesheets="@new.css" HBox.hgrow="ALWAYS" />
                 <Button fx:id="btAll" maxHeight="1.7976931348623157E308" prefWidth="225.0" styleClass="button-red" text="Ver Todos los Pedidos" />
             </children>
          <VBox.margin>
-            <Insets top="16.0" />
+            <Insets />
          </VBox.margin>
         </HBox>
 
-        <!-- Orders Table with proper growth and margins -->
         <VBox spacing="16" VBox.vgrow="ALWAYS">
             <TableView fx:id="tableOrders" prefHeight="290.0" prefWidth="536.0" styleClass="modern-table" VBox.vgrow="ALWAYS">
                 <columns>

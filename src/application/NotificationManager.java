@@ -7,13 +7,15 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class NotificationManager {
+    private static final double NOTIFICATION_TOP_ANCHOR = 15.0;
+    private static final double NOTIFICATION_RIGHT_ANCHOR = 15.0;
+    private static final double NOTIFICATION_REMOVAL_THRESHOLD = -100.0;
 
     public static void showNotificationInAllWindows(String title) {
-        Platform.runLater(() -> {
-            for (Stage stage : WindowManager.getNotificationEnabledStages()) {
-                showNotificationInWindow(title, stage);
-            }
-        });
+        Platform.runLater(() ->
+                WindowManager.getNotificationEnabledStages()
+                        .forEach(stage -> showNotificationInWindow(title, stage))
+        );
     }
 
     private static void showNotificationInWindow(String title, Stage stage) {
@@ -23,26 +25,34 @@ public class NotificationManager {
             AnchorPane notification = loader.load();
             NotificationCardController controller = loader.getController();
 
-            // Intentar obtener el MainLayoutController
-            MainLayoutController mainController = null;
-            if (root.getUserData() instanceof MainLayoutController) {
-                mainController = (MainLayoutController) root.getUserData();
-                controller.setMainLayoutController(mainController);
-            }
-
-            AnchorPane.setTopAnchor(notification, 15.0);
-            AnchorPane.setRightAnchor(notification, 15.0);
+            setupController(controller, root);
+            setupNotificationAnchors(notification);
 
             root.getChildren().add(notification);
             controller.setNotification(title);
 
-            controller.getNotificationContainer().translateYProperty().addListener((obs, old, newVal) -> {
-                if (newVal.doubleValue() <= -100) {
-                    root.getChildren().remove(notification);
-                }
-            });
+            setupRemovalListener(notification, root, controller);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private static void setupController(NotificationCardController controller, Pane root) {
+        if (root.getUserData() instanceof MainLayoutController) {
+            controller.setMainLayoutController((MainLayoutController) root.getUserData());
+        }
+    }
+
+    private static void setupNotificationAnchors(AnchorPane notification) {
+        AnchorPane.setTopAnchor(notification, NOTIFICATION_TOP_ANCHOR);
+        AnchorPane.setRightAnchor(notification, NOTIFICATION_RIGHT_ANCHOR);
+    }
+
+    private static void setupRemovalListener(AnchorPane notification, Pane root, NotificationCardController controller) {
+        controller.getNotificationContainer().translateYProperty().addListener((obs, old, newVal) -> {
+            if (newVal.doubleValue() <= NOTIFICATION_REMOVAL_THRESHOLD) {
+                root.getChildren().remove(notification);
+            }
+        });
     }
 }
